@@ -1,13 +1,22 @@
-import React, { useState } from "react";
-import { createConsultationRequest } from "../services/api";
+import React, { useEffect, useState } from "react";
+import {
+  createConsultationRequest,
+  getConsultantServices
+} from "../services/api";
 
-const BookingModal = ({ consultant, services = [], onClose }) => {
+const BookingModal = ({ consultant, onClose }) => {
+
+  const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+
   const [formData, setFormData] = useState({
     company_name: "",
     contact_name: "",
     email: "",
     phone: "",
-    service: "",
+    business_industry: "",
+    contact_role: "",
+    consultant_service: "",
     description: "",
   });
 
@@ -30,7 +39,7 @@ const BookingModal = ({ consultant, services = [], onClose }) => {
       return;
     }
 
-    if (!formData.service) {
+    if (!formData.consultant_service) {
       alert("لطفاً نوع خدمت مورد نیاز را انتخاب کنید.");
       return;
     }
@@ -43,8 +52,13 @@ const BookingModal = ({ consultant, services = [], onClose }) => {
         contact_name: formData.contact_name,
         email: formData.email,
         phone: formData.phone,
-        service: Number(formData.service),
+
+        // Service selected from this consultant's services
+        service: Number(formData.consultant_service),
+
+        // Selected consultant
         consultant: consultant.id,
+
         description: formData.description,
       };
 
@@ -73,6 +87,44 @@ const BookingModal = ({ consultant, services = [], onClose }) => {
       setLoading(false);
     }
   };
+  
+  useEffect(() => {
+
+    if (!consultant?.id) {
+      return;
+    }
+
+    const fetchServices = async () => {
+
+      try {
+
+        setLoadingServices(true);
+
+        const response = await getConsultantServices(
+          consultant.id
+        );
+
+        setServices(response.data);
+
+      } catch (error) {
+
+        console.error(
+          "Error fetching consultant services:",
+          error
+        );
+
+        setServices([]);
+
+      } finally {
+
+        setLoadingServices(false);
+
+      }
+    };
+
+    fetchServices();
+
+  }, [consultant]);
 
   return (
     <div
@@ -289,20 +341,36 @@ const BookingModal = ({ consultant, services = [], onClose }) => {
               نوع خدمت مورد نیاز:
             </label>
 
-            <input
-              type="text"
-              value={consultant?.title || ""}
-              readOnly
+            <select
+              name="consultant_service"
+              value={formData.consultant_service}
+              onChange={handleChange}
+              required
+              disabled={loadingServices}
               style={{
                 width: "100%",
                 padding: "10px",
                 borderRadius: "6px",
                 border: "1px solid #233554",
-                backgroundColor: "#1a2f4d",
-                color: "#d4af37",
-                cursor: "not-allowed",
+                backgroundColor: "#0a192f",
+                color: "#fff",
               }}
-            />
+            >
+              <option value="">
+                {loadingServices
+                  ? "در حال دریافت خدمات..."
+                  : "انتخاب خدمت"}
+              </option>
+
+              {services.map((item) => (
+                <option
+                  key={item.id}
+                  value={item.id}
+                >
+                  {item.service_title}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Description */}

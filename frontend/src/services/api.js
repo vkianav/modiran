@@ -17,6 +17,8 @@ export const getConsultants = (params = {}) =>
 export const getConsultant = (id) =>
   api.get(`consultants/${id}/`);
 
+export const getConsultantServices = (consultantId) =>
+  api.get(`consultants/${consultantId}/services/`);
 
 // Services
 export const getServices = () =>
