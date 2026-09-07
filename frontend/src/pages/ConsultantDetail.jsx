@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getConsultant,getConsultantServices } from "../services/api";
 import BookingModal from "../components/BookingModal";
-import { getConsultant } from "../services/api";
+import ConsultantCertificates from "../components/ConsultantCertificates";
+import ConsultantVideos from "../components/ConsultantVideos";
+import ConsultantAvailability from "../components/ConsultantAvailability";
+
 
 const ConsultantDetail = () => {
     const { id } = useParams();
 
     const [consultant, setConsultant] = useState(null);
+    const [consultantServices, setConsultantServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -21,9 +26,14 @@ const ConsultantDetail = () => {
         setError("");
 
         try {
-            const response = await getConsultant(id);
+            const [consultantResponse, servicesResponse] = await Promise.all([
+                getConsultant(id),
+                getConsultantServices(id),
+            ]);
 
-            setConsultant(response.data);
+            setConsultant(consultantResponse.data);
+            setConsultantServices(servicesResponse.data);
+
         } catch (error) {
             console.error("Error fetching consultant:", error);
 
@@ -237,35 +247,61 @@ const ConsultantDetail = () => {
                 </div>
 
                 {/* Expertise */}
-                <section
-                    style={{
-                        marginTop: "40px",
-                        backgroundColor: "#112240",
-                        borderRadius: "12px",
-                        padding: "30px",
-                    }}
-                >
-                    <h2
+                <div>
+                    <section
                         style={{
-                            color: "#d4af37",
-                            marginBottom: "20px",
+                            marginTop: "40px",
+                            backgroundColor: "#112240",
+                            borderRadius: "12px",
+                            padding: "30px",
                         }}
                     >
-                        حوزه تخصص
-                    </h2>
+                        <h2
+                            style={{
+                                color: "#d4af37",
+                                marginBottom: "20px",
+                            }}
+                        >
+                            حوزه تخصص
+                        </h2>
 
-                    <div
-                        style={{
-                            display: "flex",
-                            gap: "10px",
-                            flexWrap: "wrap",
-                        }}
-                    >
-                        <span className="expertise-tag">
-                            {consultant.title}
-                        </span>
-                    </div>
-                </section>
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: "10px",
+                                flexWrap: "wrap",
+                            }}
+                        >
+                            {consultantServices.length > 0 ? (
+                                consultantServices.map((consultantService) => (
+                                    <span
+                                        key={consultantService.id}
+                                        className="expertise-tag"
+                                        style={{
+                                            backgroundColor: "rgba(212, 175, 55, 0.1)",
+                                            border: "1px solid rgba(212, 175, 55, 0.4)",
+                                            color: "#d4af37",
+                                            padding: "8px 16px",
+                                            borderRadius: "20px",
+                                            fontSize: "14px",
+                                        }}
+                                    >
+                                        {consultantService.service.title}
+                                    </span>
+                                ))
+                            ) : (
+                                <span
+                                    style={{
+                                        color: "#9fb3c8",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    حوزه تخصصی ثبت نشده است.
+                                </span>
+                            )}
+                        </div>
+                    </section>
+                </div>
 
                 {/* Biography */}
                 <section
@@ -294,6 +330,27 @@ const ConsultantDetail = () => {
                         {consultant.bio}
                     </p>
                 </section>
+                
+                {/* Availability */}
+                <ConsultantAvailability
+                    availabilities={consultant.availabilities || []}
+                />
+
+               
+                {/* Certificates */}
+                <ConsultantCertificates
+                    certifications={consultant.certifications || []}
+                />
+
+
+                {/* Videos */}
+                <ConsultantVideos
+                    videos={consultant.videos || []}
+                />
+
+
+                
+               
 
             </div>
 

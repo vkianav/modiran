@@ -16,7 +16,7 @@ export const getConsultants = (params = {}) =>
 
 export const getConsultant = (id) =>
   api.get(`consultants/${id}/`);
-
+// get consultant services
 export const getConsultantServices = (consultantId) =>
   api.get(`consultants/${consultantId}/services/`);
 
@@ -26,6 +26,9 @@ export const getServices = () =>
 
 export const getService = (id) =>
   api.get(`services/${id}/`);
+//Consultation Requests
+export const getConsultationChoices = () =>
+  api.get("consultation-requests/choices/");
 
 
 // Events
