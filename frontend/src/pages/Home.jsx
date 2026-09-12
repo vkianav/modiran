@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getServices, getConsultantsBasedOnServices } from '../services/api';
 
 // Hook اختصاصی Typewriter
 function useTypewriter(text, speed = 40, startDelay = 500) {
@@ -31,135 +32,450 @@ function useTypewriter(text, speed = 40, startDelay = 500) {
   return { displayed, done };
 }
 
-// Hero Section
 const HeroSection = () => {
+  const [services, setServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
-  const serviceOptions = ['استقرار ISO', 'عارضه‌یابی سازمان', 'راهکارهای ERP', 'سمینارها و آموزش'];
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [serviceError, setServiceError] = useState("");
 
-  const toggleService = (service) => {
+  // =========================
+  // GET SERVICES FROM BACKEND
+  // =========================
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoadingServices(true);
+        setServiceError("");
+
+        const response = await getServices();
+
+        const data = response.data;
+
+        // Supports:
+        // response.data = [...]
+        // response.data = { results: [...] }
+        const serviceList = Array.isArray(data)
+          ? data
+          : data?.results || [];
+
+        setServices(serviceList);
+      } catch (error) {
+        console.error("Error loading services:", error);
+        setServiceError("خطا در دریافت حوزه‌های مشاوره.");
+      } finally {
+        setLoadingServices(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  // =========================
+  // SELECT / UNSELECT SERVICE
+  // =========================
+  const toggleService = (serviceId) => {
     setSelectedServices((prev) =>
-      prev.includes(service)
-        ? prev.filter((item) => item !== service)
-        : [...prev, service]
+      prev.includes(serviceId)
+        ? prev.filter((id) => id !== serviceId)
+        : [...prev, serviceId]
     );
   };
 
-  const headlineText = "شبکه اختصاصی مشاوران ارشد\nمدیریت و توسعه کسب‌وکار";
-  const { displayed, done } = useTypewriter(headlineText, 40, 500);
+  // =========================
+  // SELECTED SERVICE OBJECTS
+  // =========================
+  const selectedServiceObjects = services.filter((service) =>
+    selectedServices.includes(service.id)
+  );
+
+  // =========================
+  // CONSULTANTS URL
+  // =========================
+  //
+  // Example:
+  //
+  // /consultants?service=2&service=5
+  //
+  // This matches your Django backend:
+  //
+  // /api/consultants/?service=2&service=5
+  //
+  const consultantsUrl = (() => {
+    if (selectedServices.length === 0) {
+      return "/consultants";
+    }
+
+    const params = new URLSearchParams();
+
+    selectedServices.forEach((serviceId) => {
+      params.append("service", serviceId);
+    });
+
+    return `/consultants?${params.toString()}`;
+  })();
+
+  // =========================
+  // HERO TYPEWRITER
+  // =========================
+  const headlineText =
+    "شبکه اختصاصی مشاوران ارشد\nمدیریت و توسعه کسب‌وکار";
+
+  const { displayed, done } = useTypewriter(
+    headlineText,
+    40,
+    500
+  );
 
   return (
-    <section style={{ padding: '90px 20px 70px', maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
+    <section
+      style={{
+        padding: "90px 20px 70px",
+        maxWidth: "1000px",
+        margin: "0 auto",
+        textAlign: "center",
+      }}
+    >
+      {/* =========================
+          HERO TITLE
+      ========================== */}
       <div>
-        <h1 style={{ fontSize: '38px', fontWeight: 'bold', color: 'var(--accent-gold, #d4af37)', marginBottom: '20px', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>
+        <h1
+          style={{
+            fontSize: "38px",
+            fontWeight: "bold",
+            color: "var(--accent-gold, #d4af37)",
+            marginBottom: "20px",
+            lineHeight: "1.5",
+            whiteSpace: "pre-wrap",
+          }}
+        >
           {displayed}
+
           {!done && (
-            <span style={{ display: 'inline-block', width: '3px', height: '1em', backgroundColor: 'var(--accent-gold, #d4af37)', marginRight: '6px', verticalAlign: 'middle' }} />
+            <span
+              style={{
+                display: "inline-block",
+                width: "3px",
+                height: "1em",
+                backgroundColor:
+                  "var(--accent-gold, #d4af37)",
+                marginRight: "6px",
+                verticalAlign: "middle",
+              }}
+            />
           )}
         </h1>
       </div>
 
+      {/* =========================
+          DESCRIPTION
+      ========================== */}
       <div>
-        <p style={{ fontSize: '17px', color: 'var(--text-secondary, #8892b0)', marginBottom: '36px', lineHeight: '1.8', maxWidth: '750px', margin: '0 auto 36px' }}>
-          ارائه راهکارهای تخصصی در زمینه استقرار ISO، عارضه‌یابی سازمان، بهینه‌سازی فرآیندها (ERP) و برگزاری سمینارهای مدیریتی.
+        <p
+          style={{
+            fontSize: "17px",
+            color: "var(--text-secondary, #8892b0)",
+            marginBottom: "36px",
+            lineHeight: "1.8",
+            maxWidth: "750px",
+            margin: "0 auto 36px",
+          }}
+        >
+          ارائه راهکارهای تخصصی در زمینه استقرار ISO،
+          عارضه‌یابی سازمان، بهینه‌سازی فرآیندها (ERP)
+          و برگزاری سمینارهای مدیریتی.
         </p>
       </div>
 
-      <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginBottom: '65px', flexWrap: 'wrap' }}>
-        <Link 
-          to="/consultants" 
-          style={{ backgroundColor: 'var(--accent-gold, #d4af37)', color: 'var(--accent-gold-text, #0a192f)', padding: '12px 28px', borderRadius: '8px', fontWeight: 'bold', textDecoration: 'none', fontSize: '15px' }}
+      {/* =========================
+          MAIN BUTTONS
+      ========================== */}
+      <div
+        style={{
+          display: "flex",
+          gap: "16px",
+          justifyContent: "center",
+          marginBottom: "65px",
+          flexWrap: "wrap",
+        }}
+      >
+        <Link
+          to="/consultants"
+          style={{
+            backgroundColor:
+              "var(--accent-gold, #d4af37)",
+            color:
+              "var(--accent-gold-text, #0a192f)",
+            padding: "12px 28px",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            textDecoration: "none",
+            fontSize: "15px",
+          }}
         >
           مشاهده اساتید و مشاوران
         </Link>
-        <Link 
-          to="/success-stories" 
-          style={{ border: '1px solid var(--accent-gold, #d4af37)', color: 'var(--accent-gold, #d4af37)', padding: '12px 28px', borderRadius: '8px', fontWeight: 'bold', textDecoration: 'none', fontSize: '15px' }}
+
+        <Link
+          to="/success-stories"
+          style={{
+            border:
+              "1px solid var(--accent-gold, #d4af37)",
+            color:
+              "var(--accent-gold, #d4af37)",
+            padding: "12px 28px",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            textDecoration: "none",
+            fontSize: "15px",
+          }}
         >
           داستان‌های موفقیت
         </Link>
       </div>
 
-      <div style={{ borderTop: '1px solid var(--border-color, rgba(212,175,55,0.15))', paddingTop: '40px' }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--text-primary, #e6f1ff)', marginBottom: '8px' }}>
+      {/* =========================
+          SERVICE FILTER
+      ========================== */}
+      <div
+        style={{
+          borderTop:
+            "1px solid var(--border-color, rgba(212,175,55,0.15))",
+          paddingTop: "40px",
+        }}
+      >
+        <h3
+          style={{
+            fontSize: "20px",
+            fontWeight: "bold",
+            color:
+              "var(--text-primary, #e6f1ff)",
+            marginBottom: "8px",
+          }}
+        >
           به چه حوزه مشاوره‌ای نیاز دارید؟
         </h3>
-        <p style={{ fontSize: '14px', color: 'var(--text-secondary, #8892b0)', marginBottom: '24px' }}>
-          گزینه‌های مورد نظر خود را انتخاب کنید
+
+        <p
+          style={{
+            fontSize: "14px",
+            color:
+              "var(--text-secondary, #8892b0)",
+            marginBottom: "24px",
+          }}
+        >
+          یک یا چند حوزه مورد نظر خود را انتخاب کنید
         </p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '28px' }}>
-          {serviceOptions.map((service) => {
-            const isSelected = selectedServices.includes(service);
-            return (
-              <button
-                key={service}
-                onClick={() => toggleService(service)}
-                style={{
-                  padding: '10px 22px',
-                  borderRadius: '25px',
-                  border: '1px solid var(--accent-gold, #d4af37)',
-                  backgroundColor: isSelected ? 'var(--accent-gold, #d4af37)' : 'transparent',
-                  color: isSelected ? 'var(--accent-gold-text, #0a192f)' : 'var(--text-primary, #e6f1ff)',
-                  fontWeight: '500',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'all 0.25s ease'
-                }}
-              >
-                <span>{service}</span>
-                {isSelected && (
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                )}
-              </button>
-            );
-          })}
-        </div>
+        {/* =========================
+            LOADING
+        ========================== */}
+        {loadingServices && (
+          <p
+            style={{
+              color:
+                "var(--text-secondary, #8892b0)",
+              fontSize: "14px",
+            }}
+          >
+            در حال دریافت حوزه‌های مشاوره...
+          </p>
+        )}
 
+        {/* =========================
+            ERROR
+        ========================== */}
+        {!loadingServices && serviceError && (
+          <p
+            style={{
+              color: "#ef4444",
+              fontSize: "14px",
+            }}
+          >
+            {serviceError}
+          </p>
+        )}
+
+        {/* =========================
+            SERVICES
+        ========================== */}
+        {!loadingServices &&
+          !serviceError &&
+          services.length > 0 && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexWrap: "wrap",
+                gap: "12px",
+                marginBottom: "28px",
+              }}
+            >
+              {services.map((service) => {
+                const isSelected =
+                  selectedServices.includes(service.id);
+
+                return (
+                  <button
+                    key={service.id}
+                    type="button"
+                    onClick={() =>
+                      toggleService(service.id)
+                    }
+                    style={{
+                      padding: "10px 22px",
+                      borderRadius: "25px",
+                      border:
+                        "1px solid var(--accent-gold, #d4af37)",
+                      backgroundColor: isSelected
+                        ? "var(--accent-gold, #d4af37)"
+                        : "transparent",
+                      color: isSelected
+                        ? "var(--accent-gold-text, #0a192f)"
+                        : "var(--text-primary, #e6f1ff)",
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      transition: "all 0.25s ease",
+                    }}
+                  >
+                    <span>{service.title}</span>
+
+                    {isSelected && (
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+        {/* =========================
+            NO SERVICES
+        ========================== */}
+        {!loadingServices &&
+          !serviceError &&
+          services.length === 0 && (
+            <p
+              style={{
+                color:
+                  "var(--text-secondary, #8892b0)",
+                fontSize: "14px",
+              }}
+            >
+              حوزه‌ای برای نمایش وجود ندارد.
+            </p>
+          )}
+
+        {/* =========================
+            SELECTED SERVICES
+        ========================== */}
         {selectedServices.length === 0 ? (
-          <p style={{ fontStyle: 'italic', fontSize: '13px', color: 'var(--text-secondary, #8892b0)', opacity: 0.7 }}>
-            جهت استعلام یا درخواست سریع، یکی از گزینه‌های بالا را انتخاب کنید.
+          <p
+            style={{
+              fontStyle: "italic",
+              fontSize: "13px",
+              color:
+                "var(--text-secondary, #8892b0)",
+              opacity: 0.7,
+            }}
+          >
+            جهت مشاهده مشاوران مرتبط، یکی از حوزه‌های بالا
+            را انتخاب کنید.
           </p>
         ) : (
           <div
             style={{
-              backgroundColor: 'var(--bg-secondary, #112240)',
-              border: '1px solid var(--border-color, rgba(212,175,55,0.3))',
-              borderRadius: '12px',
-              padding: '16px 24px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: '16px',
-              maxWidth: '650px',
-              margin: '0 auto',
-              transition: 'all 0.3s ease'
+              backgroundColor:
+                "var(--bg-secondary, #112240)",
+              border:
+                "1px solid var(--border-color, rgba(212,175,55,0.3))",
+              borderRadius: "12px",
+              padding: "16px 24px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "16px",
+              maxWidth: "650px",
+              margin: "0 auto",
+              transition: "all 0.3s ease",
             }}
           >
-            <span style={{ fontSize: '14px', color: 'var(--text-primary, #e6f1ff)', textAlign: 'right' }}>
-              آماده پیگیری در زمینه‌های: <strong style={{ color: 'var(--accent-gold, #d4af37)' }}>{selectedServices.join('، ')}</strong>
-            </span>
-            <Link
-              to="/consultants"
+            {/* =========================
+                SELECTED SERVICE NAMES
+            ========================== */}
+            <span
               style={{
-                color: 'var(--accent-gold, #d4af37)',
-                fontWeight: 'bold',
-                fontSize: '13px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                whiteSpace: 'nowrap'
+                fontSize: "14px",
+                color:
+                  "var(--text-primary, #e6f1ff)",
+                textAlign: "right",
+                lineHeight: "1.8",
               }}
             >
-              <span>ثبت درخواست</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
+              مشاوران مورد نظر برای:{" "}
+              <strong
+                style={{
+                  color:
+                    "var(--accent-gold, #d4af37)",
+                }}
+              >
+                {selectedServiceObjects
+                  .map((service) => service.title)
+                  .join("، ")}
+              </strong>
+            </span>
+
+            {/* =========================
+                FILTERED CONSULTANTS LINK
+            ========================== */}
+            <Link
+              to={consultantsUrl}
+              style={{
+                color:
+                  "var(--accent-gold, #d4af37)",
+                fontWeight: "bold",
+                fontSize: "13px",
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span>مشاهده مشاوران</span>
+
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line
+                  x1="19"
+                  y1="12"
+                  x2="5"
+                  y2="12"
+                />
+                <polyline points="12 19 5 12 12 5" />
               </svg>
             </Link>
           </div>

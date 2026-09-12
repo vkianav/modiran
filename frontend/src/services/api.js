@@ -14,6 +14,14 @@ const api = axios.create({
 export const getConsultants = (params = {}) =>
   api.get("consultants/", { params });
 
+export const getConsultantsBasedOnServices = (serviceIds) => {
+  const query = serviceIds
+    .map((id) => `service=${encodeURIComponent(id)}`)
+    .join("&");
+
+  return api.get(`consultants/?${query}`);
+};
+
 export const getConsultant = (id) =>
   api.get(`consultants/${id}/`);
 // get consultant services
