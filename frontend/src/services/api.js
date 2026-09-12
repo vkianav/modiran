@@ -45,3 +45,10 @@ export const createConsultationRequest = (data) =>
 
 
 export default api;
+export const loginUser = async (credentials) => {
+  return await API.post('/login/', credentials);
+};
+
+export const registerUser = async (userData) => {
+  return await API.post('/register/', userData);
+};

@@ -1,20 +1,34 @@
+/* متغیرهای رنگی تم تیره (پیش‌فرض) */
 :root {
-  --primary-navy: #0F172A;
-  --accent-gold: #D4AF37;
-  --bg-light: #F8FAFC;
-  --text-dark: #1E293B;
-  --card-bg: #FFFFFF;
-  --border-color: #E2E8F0;
+  --bg-primary: #0a192f;
+  --bg-secondary: #112240;
+  --bg-card: #112240;
+  --text-primary: #e6f1ff;
+  --text-secondary: #8892b0;
+  --accent-gold: #d4af37;
+  --accent-gold-text: #0a192f;
+  --border-color: rgba(212, 175, 55, 0.2);
+  --input-bg: #0a192f;
 }
 
+/* متغیرهای رنگی تم روشن (شیک و با کنتراست بالا) */
+body.light-mode {
+  --bg-primary: #f8fafc;        /* پس‌زمینه اصلی روشن */
+  --bg-secondary: #ffffff;      /* پس‌زمینه کارت‌ها و بخش‌های ثانویه */
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;      /* رنگ متن‌های اصلی (سرمه‌ای خیلی تیره) */
+  --text-secondary: #475569;    /* رنگ متن‌های فرعی */
+  --accent-gold: #b8860b;       /* طلایی با کنتراست بالا برای متن روی سفید */
+  --accent-gold-text: #ffffff;  /* متن روی دکمه‌های طلایی */
+  --border-color: rgba(184, 134, 11, 0.25);
+  --input-bg: #f1f5f9;
+}
+
+/* اعمال استایل‌های پایه */
 body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
-  font-family: 'Tahoma', sans-serif;
-  direction: rtl;
+  font-family: system-ui, -apple-system, sans-serif;
 }
-
-a { text-decoration: none; color: inherit; }
