@@ -13,15 +13,25 @@
 
 /* متغیرهای رنگی تم روشن (شیک و با کنتراست بالا) */
 body.light-mode {
-  --bg-primary: #f8fafc;        /* پس‌زمینه اصلی روشن */
-  --bg-secondary: #ffffff;      /* پس‌زمینه کارت‌ها و بخش‌های ثانویه */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
   --bg-card: #ffffff;
-  --text-primary: #0f172a;      /* رنگ متن‌های اصلی (سرمه‌ای خیلی تیره) */
-  --text-secondary: #475569;    /* رنگ متن‌های فرعی */
-  --accent-gold: #b8860b;       /* طلایی با کنتراست بالا برای متن روی سفید */
-  --accent-gold-text: #ffffff;  /* متن روی دکمه‌های طلایی */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent-gold: #b8860b;
+  --accent-gold-text: #ffffff;
   --border-color: rgba(184, 134, 11, 0.25);
   --input-bg: #f1f5f9;
+}
+
+/* تنظیمات پایه */
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
 }
 
 /* اعمال استایل‌های پایه */
@@ -29,6 +39,7 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
-  margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
