@@ -131,7 +131,8 @@ const ConsultantVideos = ({ videos = [] }) => {
                                     paddingLeft: "3px",
                                 }}
                             >
-                                ▶
+                                ▶️
+
                             </a>
                         </div>
 

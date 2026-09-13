@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
 const Footer = () => {
   return (
     <footer style={{
@@ -14,27 +15,33 @@ const Footer = () => {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px', position: 'relative' }}>
         
         {/* لوگوی مرکز بالای فوتر */}
-        <div style={{
-          position: 'absolute',
-          top: '-85px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: 'var(--bg-primary, #ffffff)',
-          border: '2px solid var(--accent-gold, #d4af37)',
-          borderRadius: '50%',
-          width: '70px',
-          height: '70px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-          overflow: 'hidden'
-        }}>
-          {/* لوگوی اختصاصی  */}
-          <img 
-            src="/logo.png" 
-            alt="لوگوی مدیران" 
-            style={{ width: '80%', height: '80%', objectFit: 'contain' }} 
+        <div
+          style={{
+            position: "absolute",
+            top: "-38px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "78px",
+            height: "78px",
+            background: "#fff",
+            border: "2px solid #d4af37",
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "0 6px 18px rgba(0,0,0,0.18)",
+            zIndex: 10,
+            overflow: "hidden"
+          }}
+        >
+          <img
+            src="/images/logo_circular.png"
+            alt="logo"
+            style={{
+              width: "82%",
+              height: "82%",
+              objectFit: "contain"
+            }}
           />
         </div>
 

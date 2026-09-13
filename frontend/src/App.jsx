@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import About from './pages/About';
 import Consultants from './pages/Consultants';
+import ConsultantDetail from "./pages/ConsultantDetail";
 import SuccessStories from './pages/SuccessStories';
 import Events from './pages/Events';
 import AuthPage from './pages/AuthPage';
@@ -39,6 +40,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/consultants" element={<Consultants />} />
+            <Route path="/consultants/:id" element={<ConsultantDetail />} />
             <Route path="/success-stories" element={<SuccessStories />} />
             <Route path="/events" element={<Events />} />
             <Route path="/books" element={<BooksPage />} />
