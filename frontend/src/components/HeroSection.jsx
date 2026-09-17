@@ -1,127 +1,351 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ArrowLeft } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
-function useTypewriter(text, speed = 38, startDelay = 600) {
-  const [displayed, setDisplayed] = useState('');
-  const [done, setDone] = useState(false);
+const useTypewriter = (
+  text,
+  speed = 40,
+  startDelay = 500
+) => {
+  const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
-    let intervalId;
-    let currentIndex = 0;
+    let index = 0;
+    let interval;
 
-    const startTimeout = setTimeout(() => {
-      intervalId = setInterval(() => {
-        if (currentIndex < text.length) {
-          setDisplayed(text.slice(0, currentIndex + 1));
-          currentIndex++;
+    const timeout = setTimeout(() => {
+      interval = setInterval(() => {
+        if (index < text.length) {
+          setDisplayedText(text.slice(0, index + 1));
+          index++;
         } else {
-          setDone(true);
-          clearInterval(intervalId);
+          clearInterval(interval);
         }
       }, speed);
     }, startDelay);
 
     return () => {
-      clearTimeout(startTimeout);
-      if (intervalId) clearInterval(intervalId);
+      clearTimeout(timeout);
+
+      if (interval) {
+        clearInterval(interval);
+      }
     };
   }, [text, speed, startDelay]);
 
-  return { displayed, done };
-}
+  return displayedText;
+};
 
-export default function HeroSection() {
-  const [selectedServices, setSelectedServices] = useState([]);
-  const serviceOptions = ['مشاوره استراتژی', 'تحول دیجیتال', 'مدیریت مالی', 'بازاریابی و برندینگ'];
+const HeroSection = ({
+  services,
+  selectedServices,
+  loadingServices,
+  serviceError,
+  toggleService,
+  selectedServiceObjects,
+  consultantsUrl,
+}) => {
+  const headlineText =
+    "شبکه اختصاصی مشاوران ارشد\nمدیریت و توسعه کسب‌وکار";
 
-  const toggleService = (service) => {
-    setSelectedServices((prev) =>
-      prev.includes(service) ? prev.filter((item) => item !== service) : [...prev, service]
-    );
-  };
-
-  const { displayed, done } = useTypewriter('به شبکه مشاوران ارشد\nمدیران خوش آمدید', 45, 500);
+  const typedHeadline = useTypewriter(
+    headlineText,
+    40,
+    500
+  );
 
   return (
-    <div style={{ backgroundColor: '#0a192f', color: '#ffffff', padding: '120px 20px 60px 20px', direction: 'rtl' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        
-        {/* Headline */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <h1 style={{ fontSize: '3rem', fontWeight: 'bold', lineHeight: '1.2', color: '#ffffff', whiteSpace: 'pre-wrap', marginBottom: '20px' }}>
-            {displayed}
-            {!done && <span style={{ display: 'inline-block', width: '3px', height: '1em', backgroundColor: '#d4af37', marginRight: '5px' }} />}
-          </h1>
-        </motion.div>
+    <section
+      style={{
+        padding: "100px 20px 80px",
+        backgroundColor:
+          "var(--bg-primary, #0a192f)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1100px",
+          margin: "0 auto",
+          textAlign: "center",
+        }}
+      >
+        {/* Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          style={{
+            whiteSpace: "pre-line",
+            color:
+              "var(--text-primary, #ffffff)",
+            fontSize: "clamp(32px, 5vw, 54px)",
+            lineHeight: "1.5",
+            fontWeight: "bold",
+            marginBottom: "25px",
+          }}
+        >
+          {typedHeadline}
+        </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} style={{ color: '#8892b0', fontSize: '1.2rem', marginBottom: '40px' }}>
-          ارتقای کسب‌وکار شما با برترین متخصصان و مشاوران مدیریت کشور.
+        {/* Description */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          style={{
+            maxWidth: "750px",
+            margin: "0 auto 35px",
+            color:
+              "var(--text-secondary, #8892b0)",
+            fontSize: "16px",
+            lineHeight: "2",
+          }}
+        >
+          ارائه راهکارهای تخصصی در زمینه استقرار ISO،
+          عارضه‌یابی سازمان، بهینه‌سازی فرآیندها (ERP)
+          و برگزاری سمینارهای مدیریتی.
         </motion.p>
 
-        {/* Service Selector */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
-          <h3 style={{ fontSize: '1.3rem', color: '#d4af37', marginBottom: '15px' }}>به چه حوزه مشاوره‌ای نیاز دارید؟</h3>
-          
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '20px' }}>
-            {serviceOptions.map((service) => {
-              const isSelected = selectedServices.includes(service);
-              return (
-                <button
-                  key={service}
-                  onClick={() => toggleService(service)}
-                  style={{
-                    padding: '10px 20px',
-                    borderRadius: '25px',
-                    border: '1px solid #d4af37',
-                    backgroundColor: isSelected ? '#d4af37' : 'transparent',
-                    color: isSelected ? '#0a192f' : '#ffffff',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  <span>{service}</span>
-                  {isSelected && <Check size={16} />}
-                </button>
-              );
-            })}
-          </div>
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "15px",
+            flexWrap: "wrap",
+            marginBottom: "70px",
+          }}
+        >
+          <Link
+            to="/consultants"
+            style={{
+              backgroundColor:
+                "var(--accent-gold, #d4af37)",
+              color: "#0a192f",
+              padding: "13px 25px",
+              borderRadius: "8px",
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            مشاهده اساتید و مشاوران
+          </Link>
 
-          {/* Feedback Banner */}
-          <AnimatePresence mode="wait">
-            {selectedServices.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                style={{
-                  backgroundColor: '#112240',
-                  border: '1px solid #233554',
-                  padding: '15px 20px',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  justifyContent: 'space-[#d4af37]',
-                  alignItems: 'center',
-                  maxWidth: '600px'
-                }}
-              >
-                <span style={{ color: '#e6f1ff', fontSize: '0.95rem' }}>
-                  درخواست مشاوره در زمینه: <strong>{selectedServices.join('، ')}</strong>
-                </span>
-                <button style={{ backgroundColor: 'transparent', border: 'none', color: '#d4af37', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 'bold' }}>
-                  ثبت درخواست <ArrowLeft size={16} />
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <Link
+            to="/success-stories"
+            style={{
+              border:
+                "1px solid var(--accent-gold, #d4af37)",
+              color:
+                "var(--accent-gold, #d4af37)",
+              padding: "12px 25px",
+              borderRadius: "8px",
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            داستان‌های موفقیت
+          </Link>
         </motion.div>
 
+        {/* Service selection */}
+        <div>
+          <h2
+            style={{
+              color:
+                "var(--text-primary, #ffffff)",
+              fontSize: "24px",
+              marginBottom: "10px",
+            }}
+          >
+            به چه حوزه مشاوره‌ای نیاز دارید؟
+          </h2>
+
+          <p
+            style={{
+              color:
+                "var(--text-secondary, #8892b0)",
+              fontSize: "14px",
+              marginBottom: "30px",
+            }}
+          >
+            یک یا چند حوزه مورد نظر خود را انتخاب کنید
+          </p>
+
+          {loadingServices && (
+            <p
+              style={{
+                color:
+                  "var(--text-secondary, #8892b0)",
+              }}
+            >
+              در حال دریافت حوزه‌های مشاوره...
+            </p>
+          )}
+
+          {serviceError && (
+            <p
+              style={{
+                color: "#e57373",
+                marginBottom: "20px",
+              }}
+            >
+              {serviceError}
+            </p>
+          )}
+
+          {!loadingServices &&
+            !serviceError &&
+            services.length === 0 && (
+              <p
+                style={{
+                  color:
+                    "var(--text-secondary, #8892b0)",
+                }}
+              >
+                حوزه‌ای برای نمایش وجود ندارد.
+              </p>
+            )}
+
+          {!loadingServices &&
+            services.length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "12px",
+                  flexWrap: "wrap",
+                }}
+              >
+                {services.map((service) => {
+                  const isSelected =
+                    selectedServices.includes(
+                      service.id
+                    );
+
+                  return (
+                    <button
+                      key={service.id}
+                      type="button"
+                      onClick={() =>
+                        toggleService(service.id)
+                      }
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        padding: "11px 18px",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        border: `1px solid ${
+                          isSelected
+                            ? "var(--accent-gold, #d4af37)"
+                            : "var(--border-color, rgba(212,175,55,0.2))"
+                        }`,
+                        backgroundColor: isSelected
+                          ? "var(--accent-gold, #d4af37)"
+                          : "transparent",
+                        color: isSelected
+                          ? "#0a192f"
+                          : "var(--text-primary, #ffffff)",
+                        transition:
+                          "all 0.25s ease",
+                      }}
+                    >
+                      {isSelected && (
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                        >
+                          <path d="M5 12l4 4L19 7" />
+                        </svg>
+                      )}
+
+                      {service.title}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+          {/* Selected services */}
+          {!loadingServices &&
+            selectedServiceObjects.length > 0 && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: 10,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                style={{
+                  marginTop: "35px",
+                  padding: "20px",
+                  backgroundColor:
+                    "var(--bg-secondary, #112240)",
+                  border:
+                    "1px solid var(--border-color, rgba(212,175,55,0.2))",
+                  borderRadius: "10px",
+                }}
+              >
+                <p
+                  style={{
+                    color:
+                      "var(--text-primary, #ffffff)",
+                    marginBottom: "15px",
+                  }}
+                >
+                  مشاوران مورد نظر برای:{" "}
+                  <strong
+                    style={{
+                      color:
+                        "var(--accent-gold, #d4af37)",
+                    }}
+                  >
+                    {selectedServiceObjects
+                      .map(
+                        (service) =>
+                          service.title
+                      )
+                      .join("، ")}
+                  </strong>
+                </p>
+
+                <Link
+                  to={consultantsUrl}
+                  style={{
+                    color:
+                      "var(--accent-gold, #d4af37)",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                  }}
+                >
+                  مشاهده مشاوران
+                  <span
+                    style={{
+                      marginRight: "8px",
+                    }}
+                  >
+                    ←
+                  </span>
+                </Link>
+              </motion.div>
+            )}
+        </div>
       </div>
-    </div>
+    </section>
   );
-}
+};
+
+export default HeroSection;
