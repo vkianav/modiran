@@ -4,11 +4,12 @@ import {
   getConsultantServices,
   getConsultationChoices,
   getServices,
+  registerForEvent, // Import new API function
 } from "../services/api";
 
-const BookingModal = ({ consultant, onClose }) => {
+const BookingModal = ({ consultant, event, onClose }) => {
   const [services, setServices] = useState([]);
-  const [loadingServices, setLoadingServices] = useState(true);
+  const [loadingServices, setLoadingServices] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [industryOptions, setIndustryOptions] = useState([]);
@@ -26,99 +27,61 @@ const BookingModal = ({ consultant, onClose }) => {
     description: "",
   });
 
-  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Fetch choices + services
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoadingServices(true);
-
-        // Get business industries and contact roles
         const choicesResponse = await getConsultationChoices();
+        setIndustryOptions(choicesResponse.data.business_industries);
+        setContactRoleOptions(choicesResponse.data.contact_roles);
 
-        setIndustryOptions(
-          choicesResponse.data.business_industries
-        );
-
-        setContactRoleOptions(
-          choicesResponse.data.contact_roles
-        );
-
-        // -----------------------------------------
-        // SPECIFIC REQUEST
-        // User selected a consultant
-        // -----------------------------------------
-        if (consultant?.id) {
-          const response = await getConsultantServices(
-            consultant.id
-          );
-
-          console.log(
-            "Consultant services:",
-            response.data
-          );
-
-          setServices(response.data);
-        }
-
-        // -----------------------------------------
-        // GENERAL REQUEST
-        // No consultant selected
-        // Show ALL services
-        // -----------------------------------------
-        else {
-          const response = await getServices();
-
-          console.log(
-            "All services:",
-            response.data
-          );
-
-          setServices(response.data);
+        if (!event) {
+          if (consultant?.id) {
+            const response = await getConsultantServices(consultant.id);
+            setServices(response.data);
+          } else {
+            const response = await getServices();
+            setServices(response.data);
+          }
         }
       } catch (error) {
-        console.error(
-          "Error fetching booking data:",
-          error
-        );
-
-        setServices([]);
+        console.error("Error fetching choices:", error);
       } finally {
         setLoadingServices(false);
       }
     };
 
     fetchData();
-  }, [consultant]);
+  }, [consultant, event]);
 
-  // Submit consultation request
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
 
     try {
-      let requestData;
-      // -----------------------------------------
-      // SPECIFIC CONSULTANT REQUEST
-      // -----------------------------------------
-      if (consultant) {
-        if (!formData.consultant_service) {
-          alert("لطفاً خدمت مورد نیاز را انتخاب کنید.");
-          setLoading(false);
-          return;
-        }
+      if (event) {
+        // --- EVENT REGISTRATION PATH ---
+        const eventData = {
+          event_id: event.id,
+          company_name: formData.company_name,
+          contact_name: formData.contact_name,
+          email: formData.email,
+          phone: formData.phone,
+          business_industry: formData.business_industry,
+          contact_role: formData.contact_role,
+        };
 
-        requestData = {
+        console.log("Sending Event Registration Payload:", eventData);
+        await registerForEvent(eventData);
+        alert("ثبت‌نام شما در رویداد با موفقیت انجام شد.");
+      } else {
+        // --- CONSULTATION REQUEST PATH ---
+        let requestData = {
           company_name: formData.company_name,
           contact_name: formData.contact_name,
           email: formData.email,
@@ -126,71 +89,35 @@ const BookingModal = ({ consultant, onClose }) => {
           business_industry: formData.business_industry,
           contact_role: formData.contact_role,
           description: formData.description,
-
-          // Pure Specific Request: Send consultant service, clear out general service
-          service: null,
-          consultant_service: Number(formData.consultant_service),
         };
-      }
 
-
-      // -----------------------------------------
-      // GENERAL REQUEST
-      // -----------------------------------------
-      else {
-        if (!formData.service) {
-          alert("لطفاً خدمت مورد نیاز را انتخاب کنید.");
-          setLoading(false);
-          return;
+        if (consultant) {
+          if (!formData.consultant_service) {
+            alert("لطفاً خدمت مورد نیاز را انتخاب کنید.");
+            setLoading(false);
+            return;
+          }
+          requestData.consultant_service = Number(formData.consultant_service);
+          requestData.service = null;
+        } else {
+          if (!formData.service) {
+            alert("لطفاً خدمت مورد نیاز را انتخاب کنید.");
+            setLoading(false);
+            return;
+          }
+          requestData.service = Number(formData.service);
+          requestData.consultant_service = null;
         }
 
-        requestData = {
-          company_name: formData.company_name,
-          contact_name: formData.contact_name,
-          email: formData.email,
-          phone: formData.phone,
-
-          business_industry:
-            formData.business_industry,
-
-          contact_role:
-            formData.contact_role,
-
-          description: formData.description,
-          // ServiceCategory ID
-          service: Number(formData.service),
-
-          // No consultant selected
-          consultant_service: null,
-
-        };
+        console.log("Sending Consultation Payload:", requestData);
+        await createConsultationRequest(requestData);
+        alert("درخواست مشاوره شما با موفقیت ثبت شد.");
       }
-
-      console.log(
-        "Sending consultation request:",
-        requestData
-      );
-
-      await createConsultationRequest(requestData);
-
 
       onClose();
     } catch (error) {
-      console.error(
-        "Consultation request error:",
-        error
-      );
-
-      if (error.response?.data) {
-        console.error(
-          "Backend error:",
-          error.response.data
-        );
-      }
-
-      alert(
-        "خطا در ثبت درخواست. لطفاً اطلاعات واردشده را بررسی کنید."
-      );
+      console.error("Submission error:", error);
+      alert("خطا در ثبت اطلاعات. لطفاً ورودی‌های خود را بررسی کنید.");
     } finally {
       setLoading(false);
     }
@@ -223,7 +150,6 @@ const BookingModal = ({ consultant, onClose }) => {
           margin: "20px 0",
         }}
       >
-        {/* Close button */}
         <button
           onClick={onClose}
           type="button"
@@ -241,62 +167,34 @@ const BookingModal = ({ consultant, onClose }) => {
           ✕
         </button>
 
-        {/* Header */}
-        <h2
-          style={{
-            color: "#d4af37",
-            fontSize: "20px",
-            textAlign: "center",
-            marginBottom: "8px",
-          }}
-        >
-          {consultant
-            ? "درخواست جلسه با"
-            : "درخواست مشاوره"}
+        <h2 style={{ color: "#d4af37", fontSize: "20px", textAlign: "center", marginBottom: "8px" }}>
+          {event ? "ثبت‌نام در رویداد" : consultant ? "درخواست جلسه با" : "درخواست مشاوره"}
         </h2>
 
-        {consultant && (
-          <h3
+        {event && (
+          <div
             style={{
-              color: "#e6f1ff",
+              backgroundColor: "#0a192f",
+              border: "1px solid #233554",
+              borderRadius: "8px",
+              padding: "12px",
               textAlign: "center",
-              marginBottom: "24px",
+              marginBottom: "20px",
             }}
           >
+            <strong style={{ color: "#64ffda", fontSize: "16px" }}>{event.title}</strong>
+          </div>
+        )}
+
+        {consultant && (
+          <h3 style={{ color: "#e6f1ff", textAlign: "center", marginBottom: "24px" }}>
             {consultant.name}
           </h3>
         )}
 
-        {!consultant && (
-          <p
-            style={{
-              color: "#8892b0",
-              textAlign: "center",
-              marginBottom: "24px",
-              fontSize: "14px",
-            }}
-          >
-            خدمت مورد نیاز خود را انتخاب کنید تا
-            مناسب‌ترین مشاور توسط کارشناسان ما
-            انتخاب شود.
-          </p>
-        )}
-
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
-        >
-          {/* Contact Name */}
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <div>
-            <label style={labelStyle}>
-              نام و نام خانوادگی:
-            </label>
-
+            <label style={labelStyle}>نام و نام خانوادگی:</label>
             <input
               type="text"
               name="contact_name"
@@ -308,12 +206,8 @@ const BookingModal = ({ consultant, onClose }) => {
             />
           </div>
 
-          {/* Company */}
           <div>
-            <label style={labelStyle}>
-              نام سازمان / شرکت:
-            </label>
-
+            <label style={labelStyle}>نام سازمان / شرکت:</label>
             <input
               type="text"
               name="company_name"
@@ -325,12 +219,8 @@ const BookingModal = ({ consultant, onClose }) => {
             />
           </div>
 
-          {/* Email */}
           <div>
-            <label style={labelStyle}>
-              ایمیل:
-            </label>
-
+            <label style={labelStyle}>ایمیل:</label>
             <input
               type="email"
               name="email"
@@ -342,12 +232,8 @@ const BookingModal = ({ consultant, onClose }) => {
             />
           </div>
 
-          {/* Phone */}
           <div>
-            <label style={labelStyle}>
-              شماره تماس:
-            </label>
-
+            <label style={labelStyle}>شماره تماس:</label>
             <input
               type="tel"
               name="phone"
@@ -359,12 +245,8 @@ const BookingModal = ({ consultant, onClose }) => {
             />
           </div>
 
-          {/* Business Industry */}
           <div>
-            <label style={labelStyle}>
-              حوزه فعالیت:
-            </label>
-
+            <label style={labelStyle}>حوزه فعالیت:</label>
             <select
               name="business_industry"
               value={formData.business_industry}
@@ -372,27 +254,17 @@ const BookingModal = ({ consultant, onClose }) => {
               required
               style={inputStyle}
             >
-              <option value="">
-                انتخاب حوزه فعالیت
-              </option>
-
-              {industryOptions.map((industry) => (
-                <option
-                  key={industry.value}
-                  value={industry.value}
-                >
-                  {industry.label}
+              <option value="">انتخاب حوزه فعالیت</option>
+              {industryOptions.map((ind) => (
+                <option key={ind.value} value={ind.value}>
+                  {ind.label}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Contact Role */}
           <div>
-            <label style={labelStyle}>
-              سمت درخواست‌دهنده:
-            </label>
-
+            <label style={labelStyle}>سمت درخواست‌دهنده:</label>
             <select
               name="contact_role"
               value={formData.contact_role}
@@ -400,31 +272,19 @@ const BookingModal = ({ consultant, onClose }) => {
               required
               style={inputStyle}
             >
-              <option value="">
-                انتخاب سمت
-              </option>
-
+              <option value="">انتخاب سمت</option>
               {contactRoleOptions.map((role) => (
-                <option
-                  key={role.value}
-                  value={role.value}
-                >
+                <option key={role.value} value={role.value}>
                   {role.label}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* ===================================== */}
-          {/* SPECIFIC REQUEST - Consultant Service */}
-          {/* ===================================== */}
-
-          {consultant && (
+          {/* Conditional Dropdown for Services */}
+          {!event && consultant && (
             <div>
-              <label style={labelStyle}>
-                نوع خدمت مورد نیاز:
-              </label>
-
+              <label style={labelStyle}>نوع خدمت مورد نیاز:</label>
               <select
                 name="consultant_service"
                 value={formData.consultant_service}
@@ -433,34 +293,19 @@ const BookingModal = ({ consultant, onClose }) => {
                 disabled={loadingServices}
                 style={inputStyle}
               >
-                <option value="">
-                  {loadingServices
-                    ? "در حال دریافت خدمات..."
-                    : "انتخاب خدمت"}
-                </option>
-
+                <option value="">{loadingServices ? "در حال دریافت..." : "انتخاب خدمت"}</option>
                 {services.map((item) => (
-                  <option
-                    key={item.id}
-                    value={item.id}
-                  >
-                    {item.service.title}
+                  <option key={item.id} value={item.id}>
+                    {item.service?.title || item.title || "بدون عنوان"}
                   </option>
                 ))}
               </select>
             </div>
           )}
 
-          {/* ===================================== */}
-          {/* GENERAL REQUEST - All Services */}
-          {/* ===================================== */}
-
-          {!consultant && (
+          {!event && !consultant && (
             <div>
-              <label style={labelStyle}>
-                نوع خدمت مورد نیاز:
-              </label>
-
+              <label style={labelStyle}>نوع خدمت مورد نیاز:</label>
               <select
                 name="service"
                 value={formData.service}
@@ -469,66 +314,47 @@ const BookingModal = ({ consultant, onClose }) => {
                 disabled={loadingServices}
                 style={inputStyle}
               >
-                <option value="">
-                  {loadingServices
-                    ? "در حال دریافت خدمات..."
-                    : "انتخاب خدمت"}
-                </option>
-
-                {services.map((service) => (
-                  <option
-                    key={service.id}
-                    value={service.id}
-                  >
-                    {service.title}
+                <option value="">{loadingServices ? "در حال دریافت..." : "انتخاب خدمت"}</option>
+                {services.map((srv) => (
+                  <option key={srv.id} value={srv.id}>
+                    {srv.title || "بدون عنوان"}
                   </option>
                 ))}
               </select>
             </div>
           )}
 
-          {/* Description */}
-          <div>
-            <label style={labelStyle}>
-              شرح نیاز:
-            </label>
+          {/* Conditional Textarea for Description */}
+          {!event && (
+            <div>
+              <label style={labelStyle}>شرح نیاز:</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                rows="4"
+                placeholder="توضیح دهید در چه زمینه‌ای به مشاوره نیاز دارید..."
+                style={{ ...inputStyle, resize: "vertical" }}
+              />
+            </div>
+          )}
 
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-              rows="4"
-              placeholder="توضیح دهید در چه زمینه‌ای به مشاوره نیاز دارید..."
-              style={{
-                ...inputStyle,
-                resize: "vertical",
-              }}
-            />
-          </div>
-
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
             style={{
-              backgroundColor: loading
-                ? "#777"
-                : "#d4af37",
+              backgroundColor: loading ? "#777" : "#d4af37",
               color: "#0a192f",
               padding: "12px",
               borderRadius: "6px",
               fontWeight: "bold",
               border: "none",
-              cursor: loading
-                ? "not-allowed"
-                : "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               marginTop: "8px",
             }}
           >
-            {loading
-              ? "در حال ارسال..."
-              : "ثبت و ارسال درخواست"}
+            {loading ? "در حال ارسال..." : event ? "ثبت‌نام در رویداد" : "ثبت و ارسال درخواست"}
           </button>
         </form>
       </div>
@@ -536,7 +362,6 @@ const BookingModal = ({ consultant, onClose }) => {
   );
 };
 
-// Reusable styles
 const labelStyle = {
   fontSize: "13px",
   color: "#8892b0",

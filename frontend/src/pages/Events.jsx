@@ -24,7 +24,10 @@ const Events = () => {
   };
 
   const handleRegister = (eventItem) => {
-    setSelectedEvent({ name: `شرکت در ${eventItem.title}` });
+    setSelectedEvent({
+      ...eventItem,
+      name: `شرکت در ${eventItem.title}`
+    });
     setIsModalOpen(true);
   };
 
@@ -60,7 +63,7 @@ const Events = () => {
         </div>
       </div>
 
-      {isModalOpen && <BookingModal consultant={selectedEvent} onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && <BookingModal event={selectedEvent} onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };

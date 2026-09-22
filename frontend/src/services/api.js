@@ -45,6 +45,10 @@ export const getEvents = () =>
 
 export const getEvent = (id) =>
   api.get(`events/${id}/`);
+// Event Registration
+export const registerForEvent = (data) => {
+  return api.post("/event-registrations/", data);
+};
 
 
 // Consultation Requests
@@ -54,9 +58,9 @@ export const createConsultationRequest = (data) =>
 
 export default api;
 export const loginUser = async (credentials) => {
-  return await API.post('/login/', credentials);
+  return await api.post('/login/', credentials);
 };
 
 export const registerUser = async (userData) => {
-  return await API.post('/register/', userData);
+  return await api.post('/register/', userData);
 };
