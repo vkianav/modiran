@@ -6,7 +6,6 @@ const BookDetail = () => {
   const [formData, setFormData] = useState({ name: '', phone: '', address: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // دیتابیس نمونه برای کتاب‌ها
   const booksData = {
     '1': {
       title: 'راهنمای محرمانه بازاریابی اینترنتی',
@@ -69,7 +68,6 @@ const BookDetail = () => {
     }
   };
 
-  // انتخاب کتاب بر اساس ID یا انتخاب کتاب اول به عنوان دیفالت
   const book = booksData[id] || booksData['1'];
 
   const handleSubmit = (e) => {
@@ -80,66 +78,66 @@ const BookDetail = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#0a192f', color: '#ffffff', minHeight: '100vh', padding: '100px 20px 60px', direction: 'rtl' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+    <div style={{ backgroundColor: '#f8fafc', color: '#0b2545', minHeight: '100vh', padding: '40px 20px 60px', direction: 'rtl' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         
         {/* دکمه بازگشت */}
-        <div style={{ marginBottom: '30px' }}>
-          <Link to="/books" style={{ color: '#64ffda', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+        <div style={{ marginBottom: '24px' }}>
+          <Link to="/books" style={{ color: '#139a9c', textDecoration: 'none', fontSize: '14px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
             ← بازگشت به لیست کتاب‌ها
           </Link>
         </div>
 
-        {/* بخش اصلی معرفی محصول */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px', backgroundColor: '#112240', padding: '36px', borderRadius: '16px', border: '1px solid rgba(212, 175, 55, 0.25)', marginBottom: '40px' }}>
+        {/* بخش اصلی کارت کتاب */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '35px', backgroundColor: '#ffffff', padding: '32px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', marginBottom: '35px' }}>
           
           {/* تصویر کتاب */}
           <div>
-            <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(212,175,55,0.3)', height: '380px' }}>
+            <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #cbd5e1', height: '360px' }}>
               <img src={book.cover} alt={book.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <div style={{ marginTop: '20px', backgroundColor: '#0a192f', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-around', fontSize: '13px', color: '#8892b0' }}>
-              <span>نویسنده: <strong style={{ color: '#e6f1ff' }}>{book.author}</strong></span>
-              <span>تعداد صفحات: <strong style={{ color: '#e6f1ff' }}>{book.pages}</strong></span>
+            <div style={{ marginTop: '16px', backgroundColor: '#f8fafc', padding: '14px', borderRadius: '8px', border: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-around', fontSize: '12px', color: '#64748b' }}>
+              <span>نویسنده: <strong style={{ color: '#0b2545' }}>{book.author}</strong></span>
+              <span>تعداد صفحات: <strong style={{ color: '#0b2545' }}>{book.pages}</strong></span>
             </div>
           </div>
 
-          {/* اطلاعات و توضیحات کتاب */}
+          {/* اطلاعات و توضیحات */}
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <span style={{ backgroundColor: 'rgba(212,175,55,0.1)', color: '#d4af37', padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
+              <span style={{ backgroundColor: '#f1f5f9', color: '#0b2545', padding: '4px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 'bold' }}>
                 {book.category}
               </span>
-              <h1 style={{ color: '#e6f1ff', fontSize: '26px', fontWeight: 'bold', margin: '16px 0 12px', lineHeight: '1.4' }}>
+              <h1 style={{ color: '#0b2545', fontSize: '22px', fontWeight: 'bold', margin: '14px 0 10px', lineHeight: '1.4' }}>
                 {book.title}
               </h1>
-              <p style={{ color: '#8892b0', fontSize: '15px', lineHeight: '1.8', marginBottom: '24px' }}>
+              <p style={{ color: '#475569', fontSize: '14px', lineHeight: '1.8', marginBottom: '20px' }}>
                 {book.description}
               </p>
 
-              <h3 style={{ color: '#d4af37', fontSize: '16px', fontWeight: 'bold', marginBottom: '12px' }}>
+              <h3 style={{ color: '#0b2545', fontSize: '15px', fontWeight: 'bold', marginBottom: '10px' }}>
                 سرفصل‌های اصلی کتاب:
               </h3>
-              <ul style={{ listStyleType: 'none', padding: 0, margin: 0, color: '#e6f1ff', fontSize: '14px', lineHeight: '2' }}>
+              <ul style={{ listStyleType: 'none', padding: 0, margin: 0, color: '#334155', fontSize: '13px', lineHeight: '2' }}>
                 {book.chapters.map((chap, index) => (
                   <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ color: '#64ffda' }}>✓</span> {chap}
+                    <span style={{ color: '#139a9c', fontWeight: 'bold' }}>✓</span> {chap}
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* قیمت */}
-            <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ color: '#8892b0', fontSize: '14px' }}>مبلغ قابل پرداخت:</span>
+            <div style={{ marginTop: '25px', paddingTop: '15px', borderTop: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ color: '#64748b', fontSize: '13px' }}>مبلغ قابل پرداخت:</span>
               <div style={{ textAlign: 'left' }}>
                 {book.offPrice ? (
                   <>
-                    <span style={{ color: '#8892b0', fontSize: '13px', textDecoration: 'line-through', marginLeft: '10px' }}>{book.price} تومان</span>
-                    <span style={{ color: '#64ffda', fontSize: '22px', fontWeight: 'bold' }}>{book.offPrice} تومان</span>
+                    <span style={{ color: '#94a3b8', fontSize: '13px', textDecoration: 'line-through', marginLeft: '8px' }}>{book.price} تومان</span>
+                    <span style={{ color: '#d4af37', fontSize: '20px', fontWeight: 'bold' }}>{book.offPrice} تومان</span>
                   </>
                 ) : (
-                  <span style={{ color: '#d4af37', fontSize: '22px', fontWeight: 'bold' }}>{book.price} تومان</span>
+                  <span style={{ color: '#d4af37', fontSize: '20px', fontWeight: 'bold' }}>{book.price} تومان</span>
                 )}
               </div>
             </div>
@@ -147,67 +145,67 @@ const BookDetail = () => {
         </div>
 
         {/* فرم ثبت سفارش */}
-        <div style={{ backgroundColor: '#112240', padding: '36px', borderRadius: '16px', border: '1px solid rgba(212, 175, 55, 0.25)' }}>
-          <h2 style={{ color: '#d4af37', fontSize: '20px', fontWeight: 'bold', marginBottom: '8px' }}>
+        <div style={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
+          <h2 style={{ color: '#0b2545', fontSize: '18px', fontWeight: 'bold', marginBottom: '6px' }}>
             فرم سفارش و دریافت اثر
           </h2>
-          <p style={{ color: '#8892b0', fontSize: '14px', marginBottom: '24px' }}>
+          <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '20px' }}>
             مشخصات خود را وارد کنید تا همکاران ما برای ارسال فایل / نسخه چاپی با شما تماس بگیرند.
           </p>
 
           {isSubmitted ? (
-            <div style={{ backgroundColor: 'rgba(100, 255, 218, 0.1)', border: '1px solid #64ffda', borderRadius: '10px', padding: '24px', textAlign: 'center', color: '#64ffda' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>سفارش شما با موفقیت ثبت شد 🎉</h3>
-              <p style={{ fontSize: '14px', color: '#e6f1ff' }}>کارشناسان ما به زودی جهت هماهنگی ارسال با شماره ثبت شده تماس خواهند گرفت.</p>
+            <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac', borderRadius: '10px', padding: '20px', textAlign: 'center', color: '#166534' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '6px' }}>سفارش شما با موفقیت ثبت شد 🎉</h3>
+              <p style={{ fontSize: '13px', color: '#15803d' }}>کارشناسان ما به زودی جهت هماهنگی ارسال با شماره ثبت شده تماس خواهند گرفت.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', color: '#e6f1ff', fontSize: '13px', marginBottom: '8px' }}>نام و نام خانوادگی *</label>
+                <label style={{ display: 'block', color: '#475569', fontSize: '12px', marginBottom: '6px' }}>نام و نام خانوادگی *</label>
                 <input
                   type="text"
                   required
                   placeholder="مثال: علی محمدی"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  style={{ width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#0a192f', border: '1px solid rgba(212, 175, 55, 0.3)', color: '#ffffff', outline: 'none' }}
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', color: '#0b2545', outline: 'none', fontSize: '13px', boxSizing: 'border-box' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', color: '#e6f1ff', fontSize: '13px', marginBottom: '8px' }}>شماره موبایل *</label>
+                <label style={{ display: 'block', color: '#475569', fontSize: '12px', marginBottom: '6px' }}>شماره موبایل *</label>
                 <input
                   type="text"
                   required
                   placeholder="09123456789"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  style={{ width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#0a192f', border: '1px solid rgba(212, 175, 55, 0.3)', color: '#ffffff', outline: 'none', direction: 'ltr', textAlign: 'right' }}
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', color: '#0b2545', outline: 'none', fontSize: '13px', direction: 'ltr', textAlign: 'right', boxSizing: 'border-box' }}
                 />
               </div>
 
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={{ display: 'block', color: '#e6f1ff', fontSize: '13px', marginBottom: '8px' }}>آدرس جهت ارسال پستی (اختیاری)</label>
+                <label style={{ display: 'block', color: '#475569', fontSize: '12px', marginBottom: '6px' }}>آدرس جهت ارسال پستی (اختیاری)</label>
                 <textarea
                   rows="3"
                   placeholder="آدرس دقیق پستی به همراه کد پستی..."
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  style={{ width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#0a192f', border: '1px solid rgba(212, 175, 55, 0.3)', color: '#ffffff', outline: 'none' }}
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', color: '#0b2545', outline: 'none', fontSize: '13px', resize: 'none', boxSizing: 'border-box' }}
                 />
               </div>
 
-              <div style={{ gridColumn: '1 / -1', marginTop: '10px' }}>
+              <div style={{ gridColumn: '1 / -1', marginTop: '6px' }}>
                 <button
                   type="submit"
                   style={{
                     backgroundColor: '#d4af37',
-                    color: '#0a192f',
-                    padding: '14px 28px',
+                    color: '#0b2545',
+                    padding: '12px 24px',
                     borderRadius: '8px',
                     border: 'none',
                     fontWeight: 'bold',
-                    fontSize: '15px',
+                    fontSize: '14px',
                     cursor: 'pointer',
                     width: '100%'
                   }}

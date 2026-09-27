@@ -12,9 +12,10 @@ import Dashboard from './pages/Dashboard';
 import BooksPage from './pages/BooksPage';
 import BookDetail from './pages/BookDetail';
 import CourseDetail from './pages/CourseDetail';
+import DepartmentDetail from './pages/DepartmentDetail'; // اضافه شدن کامپوننت دپارتمان
 import BookingModal from './components/BookingModal';
 import ThemeToggle from './components/ThemeToggle';
-import Footer from './components/Footer'; // ۱. اضافه شدن کامپوننت فوتر
+import Footer from './components/Footer';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,12 +47,13 @@ function App() {
             <Route path="/books" element={<BooksPage />} />
             <Route path="/books/:id" element={<BookDetail />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
+            {/* روت جدید دپارتمان‌ها */}
+            <Route path="/department/:slug" element={<DepartmentDetail />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
         
-        {/* ۲. قرارگیری فوتر در انتهای تمام صفحات */}
         <Footer />
 
         {isModalOpen && <BookingModal consultant={null} onClose={() => setIsModalOpen(false)} />}
