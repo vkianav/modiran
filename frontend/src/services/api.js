@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api/";
+// Read the API base URL from the environment variable (Create React App requires REACT_APP_ prefix)
+// If Vite is used instead, use `import.meta.env.VITE_API_URL`
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api/";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -8,7 +11,6 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
 
 // Consultants
 export const getConsultants = (params = {}) =>
@@ -24,6 +26,7 @@ export const getConsultantsBasedOnServices = (serviceIds) => {
 
 export const getConsultant = (id) =>
   api.get(`consultants/${id}/`);
+
 // get consultant services
 export const getConsultantServices = (consultantId) =>
   api.get(`consultants/${consultantId}/services/`);
@@ -34,10 +37,10 @@ export const getServices = () =>
 
 export const getService = (id) =>
   api.get(`services/${id}/`);
-//Consultation Requests
+
+// Consultation Requests
 export const getConsultationChoices = () =>
   api.get("consultation-requests/choices/");
-
 
 // Events
 export const getEvents = () =>
@@ -45,22 +48,23 @@ export const getEvents = () =>
 
 export const getEvent = (id) =>
   api.get(`events/${id}/`);
+
 // Event Registration
 export const registerForEvent = (data) => {
-  return api.post("/event-registrations/", data);
+  return api.post("event-registrations/", data);
 };
-
 
 // Consultation Requests
 export const createConsultationRequest = (data) =>
   api.post("consultation-requests/", data);
 
-
-export default api;
+// Auth
 export const loginUser = async (credentials) => {
-  return await api.post('/login/', credentials);
+  return await api.post("login/", credentials);
 };
 
 export const registerUser = async (userData) => {
-  return await api.post('/register/', userData);
+  return await api.post("register/", userData);
 };
+
+export default api;
