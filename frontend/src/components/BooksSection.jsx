@@ -8,7 +8,7 @@ const books = [
     author: "مایکل پورتر",
     category: "مدیریت و استراتژی",
     description: "نگاهی کاربردی به استراتژی، رقابت و ایجاد مزیت رقابتی در سازمان‌ها.",
-    image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=500&q=80",
+    image: "/images/books/mickel.webp",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const books = [
     author: "پیتر دراکر",
     category: "مدیریت",
     description: "اصول و مفاهیم مهم مدیریت برای مدیران و رهبران سازمانی.",
-    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80",
+    image: "/images/books/pitter.webp",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const books = [
     author: "پیتر سنگه",
     category: "توسعه سازمان",
     description: "چگونه سازمان‌ها می‌توانند با نگاه سیستمی عملکرد خود را بهبود دهند.",
-    image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=500&q=80",
+    image: "/images/books/sange.webp",
   },
 ];
 

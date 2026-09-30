@@ -10,7 +10,7 @@ const news = [
     excerpt:
       "بررسی تأثیر فناوری‌های جدید بر فرآیندهای سازمانی و تصمیم‌گیری مدیران.",
     image:
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80",
+      "/images/news/digital.webp",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const news = [
     excerpt:
       "نگاهی به روش‌های شناسایی نقاط ضعف و بهینه‌سازی فرآیندهای کسب‌وکار.",
     image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+      "/images/news/management.webp",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const news = [
     excerpt:
       "چرا توسعه مهارت‌های مدیریتی باید بخشی از برنامه رشد هر سازمان باشد؟",
     image:
-      "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80",
+      "/images/news/teaching.webp",
   },
 ];
 
