@@ -5,17 +5,19 @@ const ConsultantCertificates = ({ certifications = [] }) => {
     return (
       <section
         style={{
-          marginTop: "40px",
+          marginTop: "25px",
+          backgroundColor: "var(--bg-card, #ffffff)",
+          borderRadius: "16px",
           padding: "30px",
-          backgroundColor: "rgba(10, 25, 47, 0.65)",
-          border: "1px solid rgba(212, 175, 55, 0.25)",
-          borderRadius: "14px",
+          border: "1px solid var(--border-color, #e2e8f0)",
+          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.03)",
         }}
       >
         <h2
           style={{
-            color: "#d4af37",
-            fontSize: "22px",
+            color: "var(--brand-blue-dark, #0b2545)",
+            fontSize: "20px",
+            fontWeight: "800",
             marginBottom: "10px",
             textAlign: "right",
           }}
@@ -25,8 +27,8 @@ const ConsultantCertificates = ({ certifications = [] }) => {
 
         <p
           style={{
-            color: "#9fb3c8",
-            fontSize: "15px",
+            color: "#64748b",
+            fontSize: "14px",
             textAlign: "right",
             margin: 0,
           }}
@@ -40,13 +42,19 @@ const ConsultantCertificates = ({ certifications = [] }) => {
   return (
     <section
       style={{
-        marginTop: "40px",
+        marginTop: "25px",
+        backgroundColor: "var(--bg-card, #ffffff)",
+        borderRadius: "16px",
+        padding: "30px",
+        border: "1px solid var(--border-color, #e2e8f0)",
+        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.03)",
       }}
     >
       <h2
         style={{
-          color: "#d4af37",
-          fontSize: "24px",
+          color: "var(--brand-blue-dark, #0b2545)",
+          fontSize: "20px",
+          fontWeight: "800",
           marginBottom: "20px",
           textAlign: "right",
         }}
@@ -66,9 +74,9 @@ const ConsultantCertificates = ({ certifications = [] }) => {
           <div
             key={certificate.id}
             style={{
-              backgroundColor: "rgba(10, 25, 47, 0.75)",
-              border: "1px solid rgba(212, 175, 55, 0.3)",
-              borderRadius: "14px",
+              backgroundColor: "var(--bg-secondary, #f8fafc)",
+              border: "1px solid var(--border-color, #e2e8f0)",
+              borderRadius: "12px",
               padding: "22px",
               transition: "all 0.25s ease",
             }}
@@ -76,18 +84,17 @@ const ConsultantCertificates = ({ certifications = [] }) => {
             {/* Icon */}
             <div
               style={{
-                width: "46px",
-                height: "46px",
+                width: "42px",
+                height: "42px",
                 borderRadius: "10px",
-                backgroundColor:
-                  "rgba(212, 175, 55, 0.1)",
-                border:
-                  "1px solid rgba(212, 175, 55, 0.35)",
+                backgroundColor: "rgba(19, 154, 156, 0.1)",
+                border: "1px solid rgba(19, 154, 156, 0.25)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#d4af37",
-                fontSize: "22px",
+                color: "var(--brand-blue-cyan, #139a9c)",
+                fontSize: "18px",
+                fontWeight: "bold",
                 marginBottom: "16px",
               }}
             >
@@ -96,9 +103,10 @@ const ConsultantCertificates = ({ certifications = [] }) => {
 
             <h3
               style={{
-                color: "#e6f1ff",
-                fontSize: "18px",
-                marginBottom: "10px",
+                color: "var(--brand-blue-dark, #0b2545)",
+                fontSize: "17px",
+                fontWeight: "700",
+                marginBottom: "12px",
                 lineHeight: "1.6",
               }}
             >
@@ -107,13 +115,13 @@ const ConsultantCertificates = ({ certifications = [] }) => {
 
             <p
               style={{
-                color: "#9fb3c8",
+                color: "#64748b",
                 fontSize: "14px",
                 marginBottom: "8px",
               }}
             >
               صادرکننده:{" "}
-              <span style={{ color: "#e6f1ff" }}>
+              <span style={{ color: "var(--brand-blue-dark, #0b2545)", fontWeight: "600" }}>
                 {certificate.issuer}
               </span>
             </p>
@@ -121,13 +129,13 @@ const ConsultantCertificates = ({ certifications = [] }) => {
             {certificate.certificate_number && (
               <p
                 style={{
-                  color: "#9fb3c8",
+                  color: "#64748b",
                   fontSize: "14px",
                   marginBottom: "8px",
                 }}
               >
                 شماره گواهینامه:{" "}
-                <span style={{ color: "#e6f1ff" }}>
+                <span style={{ color: "var(--brand-blue-dark, #0b2545)", fontWeight: "600" }}>
                   {certificate.certificate_number}
                 </span>
               </p>
@@ -136,13 +144,13 @@ const ConsultantCertificates = ({ certifications = [] }) => {
             {certificate.issue_date && (
               <p
                 style={{
-                  color: "#9fb3c8",
+                  color: "#64748b",
                   fontSize: "14px",
                   margin: 0,
                 }}
               >
                 تاریخ صدور:{" "}
-                <span style={{ color: "#e6f1ff" }}>
+                <span style={{ color: "var(--brand-blue-dark, #0b2545)", fontWeight: "600" }}>
                   {certificate.issue_date}
                 </span>
               </p>
@@ -156,12 +164,12 @@ const ConsultantCertificates = ({ certifications = [] }) => {
                 style={{
                   display: "inline-block",
                   marginTop: "18px",
-                  color: "#d4af37",
+                  color: "var(--brand-blue-cyan, #139a9c)",
                   textDecoration: "none",
                   fontSize: "14px",
-                  borderBottom:
-                    "1px solid rgba(212,175,55,0.5)",
-                  paddingBottom: "3px",
+                  fontWeight: "600",
+                  borderBottom: "1px solid rgba(19, 154, 156, 0.4)",
+                  paddingBottom: "2px",
                 }}
               >
                 مشاهده مدرک ←

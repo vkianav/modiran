@@ -79,7 +79,7 @@ function CoursesSection() {
                 </div>
               </div>
 
-              <Link to={`/events/${course.id}`} className="course-button">
+              <Link to={`/courses/${course.id}`} className="course-button">
                 مشاهده دوره
                 <span>←</span>
               </Link>

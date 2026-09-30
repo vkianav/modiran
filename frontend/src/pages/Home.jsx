@@ -91,6 +91,7 @@ const Home = () => {
           .join("&")}`;
 
   return (
+    
     <div
       style={{
         backgroundColor: "var(--bg-primary, #0a192f)",
@@ -100,6 +101,7 @@ const Home = () => {
         transition: "background-color 0.3s ease, color 0.3s ease",
       }}
     >
+
       {/* Hero Section */}
       <HeroSection
         services={services}
@@ -119,7 +121,6 @@ const Home = () => {
       <BooksSection />
       <CoursesSection />
       <NewsSection />
-      <MediaSection />
       <FeedbackSection />
 
       {/* اسلایدر مشتریان */}

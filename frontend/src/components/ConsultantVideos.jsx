@@ -5,17 +5,19 @@ const ConsultantVideos = ({ videos = [] }) => {
         return (
             <section
                 style={{
-                    marginTop: "40px",
+                    marginTop: "25px",
+                    backgroundColor: "var(--bg-card, #ffffff)",
+                    borderRadius: "16px",
                     padding: "30px",
-                    backgroundColor: "rgba(10, 25, 47, 0.65)",
-                    border: "1px solid rgba(212, 175, 55, 0.25)",
-                    borderRadius: "14px",
+                    border: "1px solid var(--border-color, #e2e8f0)",
+                    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.03)",
                 }}
             >
                 <h2
                     style={{
-                        color: "#d4af37",
-                        fontSize: "22px",
+                        color: "var(--brand-blue-dark, #0b2545)",
+                        fontSize: "20px",
+                        fontWeight: "800",
                         marginBottom: "10px",
                         textAlign: "right",
                     }}
@@ -25,8 +27,8 @@ const ConsultantVideos = ({ videos = [] }) => {
 
                 <p
                     style={{
-                        color: "#9fb3c8",
-                        fontSize: "15px",
+                        color: "#64748b",
+                        fontSize: "14px",
                         textAlign: "right",
                         margin: 0,
                     }}
@@ -40,13 +42,19 @@ const ConsultantVideos = ({ videos = [] }) => {
     return (
         <section
             style={{
-                marginTop: "40px",
+                marginTop: "25px",
+                backgroundColor: "var(--bg-card, #ffffff)",
+                borderRadius: "16px",
+                padding: "30px",
+                border: "1px solid var(--border-color, #e2e8f0)",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.03)",
             }}
         >
             <h2
                 style={{
-                    color: "#d4af37",
-                    fontSize: "24px",
+                    color: "var(--brand-blue-dark, #0b2545)",
+                    fontSize: "20px",
+                    fontWeight: "800",
                     marginBottom: "20px",
                     textAlign: "right",
                 }}
@@ -58,7 +66,7 @@ const ConsultantVideos = ({ videos = [] }) => {
                 style={{
                     display: "grid",
                     gridTemplateColumns:
-                        "repeat(auto-fit, minmax(300px, 1fr))",
+                        "repeat(auto-fit, minmax(280px, 1fr))",
                     gap: "20px",
                 }}
             >
@@ -66,19 +74,20 @@ const ConsultantVideos = ({ videos = [] }) => {
                     <div
                         key={video.id}
                         style={{
-                            backgroundColor: "rgba(10, 25, 47, 0.75)",
-                            border: "1px solid rgba(212, 175, 55, 0.25)",
-                            borderRadius: "14px",
+                            backgroundColor: "var(--bg-secondary, #f8fafc)",
+                            border: "1px solid var(--border-color, #e2e8f0)",
+                            borderRadius: "12px",
                             overflow: "hidden",
+                            transition: "all 0.25s ease",
                         }}
                     >
-                        {/* Thumbnail */}
+                        {/* Thumbnail Container */}
                         <div
                             style={{
                                 position: "relative",
                                 width: "100%",
                                 height: "190px",
-                                backgroundColor: "#081525",
+                                backgroundColor: "#e2e8f0",
                             }}
                         >
                             {video.thumbnail_url ? (
@@ -99,8 +108,8 @@ const ConsultantVideos = ({ videos = [] }) => {
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        color: "#d4af37",
-                                        fontSize: "45px",
+                                        color: "var(--brand-blue-cyan, #139a9c)",
+                                        fontSize: "40px",
                                     }}
                                 >
                                     ▶
@@ -120,19 +129,18 @@ const ConsultantVideos = ({ videos = [] }) => {
                                     width: "52px",
                                     height: "52px",
                                     borderRadius: "50%",
-                                    backgroundColor:
-                                        "rgba(212, 175, 55, 0.95)",
-                                    color: "#071525",
+                                    backgroundColor: "var(--brand-blue-cyan, #139a9c)",
+                                    color: "#ffffff",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
                                     textDecoration: "none",
-                                    fontSize: "20px",
-                                    paddingLeft: "3px",
+                                    fontSize: "18px",
+                                    boxShadow: "0 4px 12px rgba(19, 154, 156, 0.4)",
+                                    transition: "transform 0.2s ease",
                                 }}
                             >
-                                ▶️
-
+                                ▶
                             </a>
                         </div>
 
@@ -145,8 +153,9 @@ const ConsultantVideos = ({ videos = [] }) => {
                         >
                             <h3
                                 style={{
-                                    color: "#e6f1ff",
-                                    fontSize: "18px",
+                                    color: "var(--brand-blue-dark, #0b2545)",
+                                    fontSize: "16px",
+                                    fontWeight: "700",
                                     marginBottom: "10px",
                                     lineHeight: "1.6",
                                 }}
@@ -157,9 +166,9 @@ const ConsultantVideos = ({ videos = [] }) => {
                             {video.description && (
                                 <p
                                     style={{
-                                        color: "#9fb3c8",
+                                        color: "#64748b",
                                         fontSize: "14px",
-                                        lineHeight: "1.8",
+                                        lineHeight: "1.7",
                                         marginBottom: "12px",
                                     }}
                                 >
@@ -170,8 +179,9 @@ const ConsultantVideos = ({ videos = [] }) => {
                             {video.published_at && (
                                 <span
                                     style={{
-                                        color: "#71859a",
+                                        color: "#94a3b8",
                                         fontSize: "13px",
+                                        fontWeight: "500",
                                     }}
                                 >
                                     {new Date(

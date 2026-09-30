@@ -1,15 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+// آدرس عکس‌های خود را جایگزین کنید (از فولدر assets یا public)
 const solutions = [
   {
     id: 1,
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 8v8M8 12h8" />
-      </svg>
-    ),
+    image: "/images/solutions/iso9001-2.webp",
     title: "استقرار سیستم‌های ایزو (ISO)",
     description:
       "طراحی، استقرار و بهبود سیستم‌های مدیریتی و استانداردهای بین‌المللی متناسب با نیاز سازمان.",
@@ -17,11 +13,7 @@ const solutions = [
   },
   {
     id: 2,
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-      </svg>
-    ),
+    image: "/images/solutions/erp.webp",
     title: "عارضه‌یابی و راهکارهای ERP",
     description:
       "شناسایی چالش‌های سازمانی و ارائه راهکارهای عملی برای بهبود فرآیندها و یکپارچه‌سازی سیستم‌ها.",
@@ -29,13 +21,7 @@ const solutions = [
   },
   {
     id: 3,
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-        <line x1="8" y1="21" x2="16" y2="21" />
-        <line x1="12" y1="17" x2="12" y2="21" />
-      </svg>
-    ),
+    image: "/images/solutions/event2.webp",
     title: "سمینارها و دوره‌های آموزشی",
     description:
       "برگزاری دوره‌ها، کارگاه‌ها و سمینارهای تخصصی با حضور اساتید و مشاوران باتجربه.",
@@ -60,7 +46,29 @@ function SolutionsSection() {
         <div className="solutions-grid">
           {solutions.map((solution) => (
             <article className="solution-card" key={solution.id}>
-              <div className="solution-icon">{solution.icon}</div>
+              {/* بخش تصویر جایگزین آیکون شده است */}
+              <div
+                className="solution-image-wrapper"
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  overflow: "hidden",
+                  borderRadius: "12px",
+                  marginBottom: "10px",
+                }}
+              >
+                <img
+                  src={solution.image}
+                  alt={solution.title}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+              </div>
+
               <h3>{solution.title}</h3>
               <p>{solution.description}</p>
               <div className="solution-features">

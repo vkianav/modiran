@@ -132,7 +132,7 @@ const Footer = () => {
                 justifyContent: 'center',
                 boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
               }}>
-                <img src="https://trustseal.enamad.ir/logo.aspx" alt="اینماد" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                <img src="/images/enamad.webp" alt="اینماد" style={{ maxWidth: '100%', maxHeight: '100%' }} />
               </div>
               <div style={{
                 backgroundColor: '#ffffff',
@@ -146,7 +146,7 @@ const Footer = () => {
                 justifyContent: 'center',
                 boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
               }}>
-                <img src="https://www.zarinpal.com/blog/wp-content/uploads/2021/04/ZarinPal-Logo.png" alt="زرین‌پال" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                <img src="/images/zarinpal.webp" alt="زرین‌پال" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
               </div>
             </div>
           </div>

@@ -2,18 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import IntroVideoSection from "./IntroVideoSection";
-
-// لیست دپارتمان‌ها و اسلاگ اختصاصی هر کدام برای هدایت به صفحه جزئیات
-const departmentsList = [
-  { name: "دپارتمان مدیریت و استراتژی", slug: "management", icon: "👥" },
-  { name: "دپارتمان مالی و بازرگانی", slug: "finance", icon: "💰" },
-  { name: "دپارتمان صنایع و ERP", slug: "erp", icon: "🔧" },
-  { name: "دپارتمان فناوری اطلاعات (IT)", slug: "it", icon: "🖥️" },
-  { name: "دپارتمان منابع انسانی", slug: "hr", icon: "👤" },
-  { name: "دپارتمان بازاریابی و فروش", slug: "sales", icon: "📊" },
-  { name: "دپارتمان استقرار ISO و کیفیت", slug: "iso", icon: "✔️" },
-  { name: "دپارتمان حقوقی و قراردادها", slug: "legal", icon: "📚" },
-];
+import DepartmentList from "./DepartmentList";
 
 const useTypewriter = (text, speed = 40, startDelay = 500) => {
   const [displayedText, setDisplayedText] = useState("");
@@ -59,7 +48,7 @@ const HeroSection = ({
   return (
     <section
       style={{
-        padding: "100px 20px 80px",
+        padding: "10px 10px 20px",
         backgroundColor: "var(--bg-primary, #f8fafc)",
         position: "relative",
         overflow: "hidden",
@@ -84,7 +73,7 @@ const HeroSection = ({
             fontSize: "clamp(32px, 5vw, 54px)",
             lineHeight: "1.5",
             fontWeight: "800",
-            marginBottom: "25px",
+            marginBottom: "15px",
             fontFamily: "var(--font-family, inherit)",
           }}
         >
@@ -98,7 +87,7 @@ const HeroSection = ({
           transition={{ delay: 0.5, duration: 0.8 }}
           style={{
             maxWidth: "750px",
-            margin: "0 auto 35px",
+            margin: "0 auto 15px",
             color: "var(--text-secondary, #475569)",
             fontSize: "16px",
             lineHeight: "2",
@@ -124,7 +113,7 @@ const HeroSection = ({
           <Link
             to="/consultants"
             style={{
-              backgroundColor: "var(--accent-gold, #d4af37)",
+              backgroundColor: "var(--accent-gold, #e7c03e)",
               color: "#0b2545",
               padding: "13px 28px",
               borderRadius: "10px",
@@ -182,62 +171,7 @@ const HeroSection = ({
             یک یا چند حوزه مورد نظر خود را انتخاب کنید
           </p>
 
-          {/* ۱. شبکه آیکون‌های شکل‌دار (هدایت مستقیم به جزئیات دپارتمان‌ها) */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
-              gap: "20px",
-              marginBottom: "40px",
-              justifyContent: "center",
-            }}
-          >
-            {departmentsList.map((dept, index) => (
-              <Link
-                key={index}
-                to={`/department/${dept.slug}`}
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  padding: "16px 12px",
-                  borderRadius: "12px",
-                  backgroundColor: "var(--bg-card, #ffffff)",
-                  border: "1px solid var(--border-color, #e2e8f0)",
-                  boxShadow: "var(--card-shadow, 0 4px 12px rgba(0, 0, 0, 0.03))",
-                  transition: "all 0.25s ease",
-                  cursor: "pointer",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-5px)";
-                  e.currentTarget.style.borderColor = "var(--brand-blue-cyan, #139a9c)";
-                  e.currentTarget.style.boxShadow = "0 8px 20px rgba(19, 154, 156, 0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.borderColor = "var(--border-color, #e2e8f0)";
-                  e.currentTarget.style.boxShadow = "var(--card-shadow, 0 4px 12px rgba(0, 0, 0, 0.03))";
-                }}
-              >
-                <div style={{ fontSize: "36px", marginBottom: "10px" }}>{dept.icon}</div>
-                <span
-                  style={{
-                    fontSize: "13px",
-                    fontWeight: "600",
-                    textAlign: "center",
-                    color: "var(--text-primary, #0f172a)",
-                    lineHeight: "1.4",
-                  }}
-                >
-                  {dept.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-
-          {/* ۲. دکمه‌های کادری (فیلتر کردن مشاوران) */}
+          {/* دکمه‌های کادری (فیلتر کردن مشاوران) */}
           {loadingServices && (
             <p style={{ color: "var(--text-secondary, #475569)" }}>
               در حال دریافت حوزه‌های مشاوره...
@@ -261,6 +195,7 @@ const HeroSection = ({
               style={{
                 display: "flex",
                 justifyContent: "center",
+                marginBottom: "60px",
                 gap: "12px",
                 flexWrap: "wrap",
               }}
@@ -280,14 +215,9 @@ const HeroSection = ({
                       padding: "11px 18px",
                       borderRadius: "10px",
                       cursor: "pointer",
-                      border: `1px solid ${
-                        isSelected
-                          ? "var(--brand-blue-cyan, #139a9c)"
-                          : "var(--border-color, #e2e8f0)"
-                      }`,
                       backgroundColor: isSelected
-                        ? "var(--brand-blue-cyan, #139a9c)"
-                        : "var(--bg-card, #ffffff)",
+                        ? "var(--brand-green, #d4af37)"
+                        : "var(--bg-card, #e9d8d8)",
                       color: isSelected
                         ? "#ffffff"
                         : "var(--text-primary, #0f172a)",
@@ -368,6 +298,7 @@ const HeroSection = ({
             </motion.div>
           )}
         </div>
+        <DepartmentList />
       </div>
     </section>
   );

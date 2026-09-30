@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getConsultant,getConsultantServices } from "../services/api";
+import { getConsultant, getConsultantServices } from "../services/api";
 import BookingModal from "../components/BookingModal";
 import ConsultantCertificates from "../components/ConsultantCertificates";
 import ConsultantVideos from "../components/ConsultantVideos";
 import ConsultantAvailability from "../components/ConsultantAvailability";
-
+import "../styles/consultantDetail.css";
 
 const ConsultantDetail = () => {
     const { id } = useParams();
@@ -33,7 +33,6 @@ const ConsultantDetail = () => {
 
             setConsultant(consultantResponse.data);
             setConsultantServices(servicesResponse.data);
-
         } catch (error) {
             console.error("Error fetching consultant:", error);
 
@@ -45,17 +44,7 @@ const ConsultantDetail = () => {
 
     if (loading) {
         return (
-            <div
-                style={{
-                    backgroundColor: "#0a192f",
-                    color: "#8892b0",
-                    minHeight: "100vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    direction: "rtl",
-                }}
-            >
+            <div className="cd-page cd-page--center">
                 در حال بارگذاری اطلاعات مشاور...
             </div>
         );
@@ -63,295 +52,102 @@ const ConsultantDetail = () => {
 
     if (error || !consultant) {
         return (
-            <div
-                style={{
-                    backgroundColor: "#0a192f",
-                    color: "#e74c3c",
-                    minHeight: "100vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    direction: "rtl",
-                }}
-            >
+            <div className="cd-page cd-page--center cd-page--error">
                 {error}
             </div>
         );
     }
 
     return (
-        <div
-            style={{
-                backgroundColor: "#0a192f",
-                color: "#ffffff",
-                minHeight: "100vh",
-                padding: "50px 20px",
-                direction: "rtl",
-            }}
-        >
-            <div
-                style={{
-                    maxWidth: "1100px",
-                    margin: "0 auto",
-                }}
-            >
+        <div className="cd-page" dir="rtl">
+            <div className="cd-container">
 
                 {/* Main Profile */}
-                <div
-                    style={{
-                        backgroundColor: "#112240",
-                        borderRadius: "16px",
-                        border: "1px solid rgba(212,175,55,0.3)",
-                        padding: "35px",
-                        display: "grid",
-                        gridTemplateColumns: "300px 1fr",
-                        gap: "40px",
-                        alignItems: "start",
-                    }}
-                >
+                <div className="cd-profile">
 
                     {/* Image */}
-                    <div>
+                    <div className="cd-photo-wrap">
                         {consultant.image_url ? (
                             <img
                                 src={consultant.image_url}
                                 alt={consultant.name}
-                                style={{
-                                    width: "100%",
-                                    height: "330px",
-                                    objectFit: "cover",
-                                    borderRadius: "12px",
-                                }}
+                                className="cd-photo"
                             />
                         ) : (
-                            <div
-                                style={{
-                                    width: "100%",
-                                    height: "330px",
-                                    borderRadius: "12px",
-                                    backgroundColor: "#233554",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    color: "#8892b0",
-                                }}
-                            >
+                            <div className="cd-photo cd-photo--placeholder">
                                 تصویر مشاور
                             </div>
                         )}
                     </div>
 
                     {/* Information */}
-                    <div>
+                    <div className="cd-info">
+                        <h1 className="cd-name">{consultant.name}</h1>
+                        <h2 className="cd-title">{consultant.title}</h2>
 
-                        <h1
-                            style={{
-                                color: "#d4af37",
-                                fontSize: "30px",
-                                marginBottom: "10px",
-                            }}
-                        >
-                            {consultant.name}
-                        </h1>
-
-                        <h2
-                            style={{
-                                color: "#e6f1ff",
-                                fontSize: "20px",
-                                marginBottom: "20px",
-                            }}
-                        >
-                            {consultant.title}
-                        </h2>
-
-                        <div
-                            style={{
-                                display: "inline-block",
-                                backgroundColor: "rgba(212,175,55,0.1)",
-                                border: "1px solid #d4af37",
-                                color: "#d4af37",
-                                padding: "7px 14px",
-                                borderRadius: "20px",
-                                marginBottom: "25px",
-                            }}
-                        >
-                            ✓ مشاور تأیید شده مدیران
-                        </div>
+                        <div className="cd-verified">✓ مشاور تأیید شده مدیران</div>
 
                         {/* Experience */}
-                        <div
-                            style={{
-                                display: "flex",
-                                gap: "20px",
-                                marginBottom: "25px",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    backgroundColor: "#0a192f",
-                                    padding: "15px 25px",
-                                    borderRadius: "8px",
-                                }}
-                            >
-                                <strong
-                                    style={{
-                                        color: "#d4af37",
-                                        fontSize: "22px",
-                                    }}
-                                >
-                                    {consultant.experience_years}
-                                </strong>
-
-                                <div
-                                    style={{
-                                        color: "#8892b0",
-                                        fontSize: "13px",
-                                    }}
-                                >
-                                    سال تجربه
-                                </div>
+                        <div className="cd-stats">
+                            <div className="cd-stat">
+                                <strong>{consultant.experience_years}</strong>
+                                <span>سال تجربه</span>
                             </div>
                         </div>
 
                         {/* Bio */}
-                        <p
-                            style={{
-                                color: "#ccd6f6",
-                                lineHeight: "2",
-                                fontSize: "15px",
-                                marginBottom: "30px",
-                            }}
-                        >
-                            {consultant.bio}
-                        </p>
+                        <p className="cd-bio">{consultant.bio}</p>
 
                         {/* Button */}
                         <button
+                            className="cd-cta"
                             onClick={() => setIsModalOpen(true)}
-                            style={{
-                                backgroundColor: "#d4af37",
-                                color: "#0a192f",
-                                border: "none",
-                                borderRadius: "7px",
-                                padding: "13px 30px",
-                                fontWeight: "bold",
-                                cursor: "pointer",
-                                fontSize: "15px",
-                            }}
                         >
                             درخواست جلسه مشاوره
                         </button>
-
                     </div>
                 </div>
 
                 {/* Expertise */}
-                <div>
-                    <section
-                        style={{
-                            marginTop: "40px",
-                            backgroundColor: "#112240",
-                            borderRadius: "12px",
-                            padding: "30px",
-                        }}
-                    >
-                        <h2
-                            style={{
-                                color: "#d4af37",
-                                marginBottom: "20px",
-                            }}
-                        >
-                            حوزه تخصص
-                        </h2>
+                <section className="cd-section">
+                    <h2 className="cd-section-title">حوزه تخصص</h2>
 
-                        <div
-                            style={{
-                                display: "flex",
-                                gap: "10px",
-                                flexWrap: "wrap",
-                            }}
-                        >
-                            {consultantServices.length > 0 ? (
-                                consultantServices.map((consultantService) => (
-                                    <span
-                                        key={consultantService.id}
-                                        className="expertise-tag"
-                                        style={{
-                                            backgroundColor: "rgba(212, 175, 55, 0.1)",
-                                            border: "1px solid rgba(212, 175, 55, 0.4)",
-                                            color: "#d4af37",
-                                            padding: "8px 16px",
-                                            borderRadius: "20px",
-                                            fontSize: "14px",
-                                        }}
-                                    >
-                                        {consultantService.service.title}
-                                    </span>
-                                ))
-                            ) : (
+                    <div className="cd-tags">
+                        {consultantServices.length > 0 ? (
+                            consultantServices.map((consultantService) => (
                                 <span
-                                    style={{
-                                        color: "#9fb3c8",
-                                        fontSize: "14px",
-                                    }}
+                                    key={consultantService.id}
+                                    className="expertise-tag cd-tag"
                                 >
-                                    حوزه تخصصی ثبت نشده است.
+                                    {consultantService.service.title}
                                 </span>
-                            )}
-                        </div>
-                    </section>
-                </div>
+                            ))
+                        ) : (
+                            <span className="cd-empty">
+                                حوزه تخصصی ثبت نشده است.
+                            </span>
+                        )}
+                    </div>
+                </section>
 
                 {/* Biography */}
-                <section
-                    style={{
-                        marginTop: "25px",
-                        backgroundColor: "#112240",
-                        borderRadius: "12px",
-                        padding: "30px",
-                    }}
-                >
-                    <h2
-                        style={{
-                            color: "#d4af37",
-                            marginBottom: "15px",
-                        }}
-                    >
-                        درباره مشاور
-                    </h2>
-
-                    <p
-                        style={{
-                            color: "#ccd6f6",
-                            lineHeight: "2",
-                        }}
-                    >
-                        {consultant.bio}
-                    </p>
+                <section className="cd-section">
+                    <h2 className="cd-section-title">درباره مشاور</h2>
+                    <p className="cd-about">{consultant.bio}</p>
                 </section>
-                
+
                 {/* Availability */}
                 <ConsultantAvailability
                     availabilities={consultant.availabilities || []}
                 />
 
-               
                 {/* Certificates */}
                 <ConsultantCertificates
                     certifications={consultant.certifications || []}
                 />
 
-
                 {/* Videos */}
-                <ConsultantVideos
-                    videos={consultant.videos || []}
-                />
-
-
-                
-               
-
+                <ConsultantVideos videos={consultant.videos || []} />
             </div>
 
             {/* Booking */}

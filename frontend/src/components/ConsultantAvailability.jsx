@@ -20,15 +20,19 @@ const ConsultantAvailability = ({ availabilities = [] }) => {
             <section
                 style={{
                     marginTop: "25px",
-                    backgroundColor: "#112240",
-                    borderRadius: "12px",
+                    backgroundColor: "var(--bg-card, #ffffff)",
+                    borderRadius: "16px",
                     padding: "30px",
+                    border: "1px solid var(--border-color, #e2e8f0)",
+                    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.03)",
                 }}
             >
                 <h2
                     style={{
-                        color: "#d4af37",
+                        color: "var(--brand-blue-dark, #0b2545)",
                         marginBottom: "15px",
+                        fontSize: "20px",
+                        fontWeight: "800",
                     }}
                 >
                     زمان‌های در دسترس
@@ -36,8 +40,9 @@ const ConsultantAvailability = ({ availabilities = [] }) => {
 
                 <p
                     style={{
-                        color: "#8892b0",
+                        color: "#64748b",
                         margin: 0,
+                        fontSize: "14px",
                     }}
                 >
                     در حال حاضر زمان مشخصی برای مشاوره ثبت نشده است.
@@ -50,15 +55,19 @@ const ConsultantAvailability = ({ availabilities = [] }) => {
         <section
             style={{
                 marginTop: "25px",
-                backgroundColor: "#112240",
-                borderRadius: "12px",
+                backgroundColor: "var(--bg-card, #ffffff)",
+                borderRadius: "16px",
                 padding: "30px",
+                border: "1px solid var(--border-color, #e2e8f0)",
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.03)",
             }}
         >
             <h2
                 style={{
-                    color: "#d4af37",
+                    color: "var(--brand-blue-dark, #0b2545)",
                     marginBottom: "10px",
+                    fontSize: "20px",
+                    fontWeight: "800",
                 }}
             >
                 زمان‌های در دسترس
@@ -66,7 +75,7 @@ const ConsultantAvailability = ({ availabilities = [] }) => {
 
             <p
                 style={{
-                    color: "#8892b0",
+                    color: "#64748b",
                     marginBottom: "25px",
                     fontSize: "14px",
                 }}
@@ -78,35 +87,49 @@ const ConsultantAvailability = ({ availabilities = [] }) => {
                 style={{
                     display: "grid",
                     gridTemplateColumns:
-                        "repeat(auto-fit, minmax(220px, 1fr))",
-                    gap: "15px",
+                        "repeat(auto-fit, minmax(200px, 1fr))",
+                    gap: "16px",
                 }}
             >
                 {availableTimes.map((availability) => (
                     <div
                         key={availability.id}
                         style={{
-                            backgroundColor: "#0a192f",
-                            border: "1px solid rgba(212,175,55,0.25)",
-                            borderRadius: "10px",
-                            padding: "18px",
+                            backgroundColor: "var(--bg-secondary, #f8fafc)",
+                            border: "1px solid var(--border-color, #e2e8f0)",
+                            borderRadius: "12px",
+                            padding: "16px 20px",
+                            transition: "all 0.3s ease",
                         }}
                     >
                         <div
                             style={{
-                                color: "#d4af37",
-                                fontWeight: "bold",
-                                fontSize: "16px",
-                                marginBottom: "10px",
+                                color: "var(--brand-blue-cyan, #139a9c)",
+                                fontWeight: "700",
+                                fontSize: "15px",
+                                marginBottom: "8px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "6px",
                             }}
                         >
+                            <span
+                                style={{
+                                    width: "8px",
+                                    height: "8px",
+                                    borderRadius: "50%",
+                                    backgroundColor: "var(--brand-blue-cyan, #139a9c)",
+                                    display: "inline-block",
+                                }}
+                            />
                             {DAYS[availability.day_of_week]}
                         </div>
 
                         <div
                             style={{
-                                color: "#ccd6f6",
-                                fontSize: "15px",
+                                color: "var(--brand-blue-dark, #0b2545)",
+                                fontSize: "14px",
+                                fontWeight: "600",
                             }}
                         >
                             {availability.start_time} تا{" "}

@@ -4,26 +4,66 @@ const videosList = [
   {
     id: 1,
     title: "معرفی مجتمع آموزشی مدیران",
-    duration: "۰۳:۱۶",
     aparatId: "B2Iv4",
-    poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNQvn75MV3Ypr0XMbblvGKYhVEjS-uXq_BRr5CcazvIZHwGUgO2UuQEyA&s=10",
+  },
+  {
+    id: 2,
+    title: "معرفی حوزه‌های فعالیت شبکه مشاوران مدیران",
+    aparatId: "s2001q3", // replace with second video ID
   },
 ];
 
 const IntroVideoSection = () => {
-  const [activeVideo, setActiveVideo] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Add your search action or navigation logic here
+      console.log("Searching for service:", searchQuery);
+    }
+  };
 
   return (
-    <section className="intro-section" dir="rtl">
-      <div className="intro-container">
+    <section className="intro-video-section" dir="rtl">
+      <div className="intro-video-container">
         {/* بنر اصلی بالا */}
         <div className="intro-banner-card">
           <div className="intro-banner-content">
             <div className="intro-badge">پلتفرم جامع مدیریت و مشاوره</div>
-            <h2>شبکه مشاوران ارشد مدیران</h2>
-            <p className="intro-subtitle">
+            <h2 className="intro-subtitle">
               برند برتر خدمات مشاوره، استقرار ERP و ISO
-            </p>
+            </h2>
+
+            {/* فرم جستجوی خدمات */}
+            <form className="intro-search-form" onSubmit={handleSearchSubmit}>
+              <div className="intro-search-input-wrapper">
+                <svg
+                  className="search-icon"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="جستجوی خدمات، دوره‌ها یا مشاوره..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="intro-search-input"
+                />
+              </div>
+              <button type="submit" className="intro-search-button">
+                جستجو
+              </button>
+            </form>
 
             <div className="intro-socials">
               <a href="#instagram" aria-label="Instagram">
@@ -49,14 +89,11 @@ const IntroVideoSection = () => {
             </div>
           </div>
 
-          <div className="intro-banner-image">
+          <div className="intro-banner-image-wrapper">
             <img
-              src="/images/modiran.png"
+              src="/images/modiran_group.webp"
               alt="شبکه مشاوران مدیران"
-              onError={(e) => {
-                // اگر عکس محلی لود نشد، عکس پیش‌فرض قرار گیرد
-                e.target.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNQvn75MV3Ypr0XMbblvGKYhVEjS-uXq_BRr5CcazvIZHwGUgO2UuQEyA&s=10";
-              }}
+              className="intro-banner-img"
             />
           </div>
         </div>
@@ -65,30 +102,16 @@ const IntroVideoSection = () => {
         <div className="intro-videos-grid">
           {videosList.map((video) => (
             <div key={video.id} className="intro-video-card">
-              <span className="intro-video-duration">{video.duration}</span>
+              {video.duration && <span className="intro-video-duration">{video.duration}</span>}
 
-              {activeVideo === video.id ? (
-                <div className="intro-video-player-wrapper">
-                  <iframe
-                    src={`https://www.aparat.com/video/video/embed/videohash/${video.aparatId}/vt/frame`}
-                    allowFullScreen={true}
-                    title={video.title}
-                    className="intro-video-player"
-                  />
-                </div>
-              ) : (
-                <div
-                  className="intro-video-poster"
-                  onClick={() => setActiveVideo(video.id)}
-                >
-                  <img src={video.poster} alt={video.title} />
-                  <div className="intro-play-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  </div>
-                </div>
-              )}
+              <div className="intro-video-player-wrapper">
+                <iframe
+                  src={`https://www.aparat.com/video/video/embed/videohash/${video.aparatId}/vt/frame`}
+                  allowFullScreen={true}
+                  title={video.title}
+                  className="intro-video-player"
+                />
+              </div>
 
               <div className="intro-video-info">
                 <h3>{video.title}</h3>

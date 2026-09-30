@@ -14,7 +14,6 @@ import BookDetail from './pages/BookDetail';
 import CourseDetail from './pages/CourseDetail';
 import DepartmentDetail from './pages/DepartmentDetail'; // اضافه شدن کامپوننت دپارتمان
 import BookingModal from './components/BookingModal';
-import ThemeToggle from './components/ThemeToggle';
 import Footer from './components/Footer';
 
 function App() {
@@ -33,7 +32,6 @@ function App() {
       >
         <Navbar onOpenModal={() => setIsModalOpen(true)} />
         
-        <ThemeToggle />
 
         {/* بخش محتوای اصلی صفحات */}
         <main style={{ flex: 1 }}>
