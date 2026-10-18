@@ -3,7 +3,6 @@ from django.contrib import admin
 from .models import (
     Consultant,
     Certification,
-    ConsultantService,
     ConsultantVideo,
     ConsultantAvailability,
 )
@@ -114,11 +113,3 @@ class ConsultantAvailabilityAdmin(admin.ModelAdmin):
     @admin.display(description="روز هفته")
     def day_name(self, obj):
         return obj.get_day_of_week_display()
-
-
-
-@admin.register(ConsultantService)
-class ConsultantServiceAdmin(admin.ModelAdmin):
-    list_display = ("id", "consultant", "service", "created_at")
-    list_filter = ("service", "created_at")
-    search_fields = ("consultant__name", "service__title")
