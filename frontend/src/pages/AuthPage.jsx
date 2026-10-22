@@ -48,8 +48,27 @@ const AuthPage = () => {
       alert('حساب کاربری با موفقیت ساخته شد. اکنون می‌توانید وارد شوید.');
       setIsSignUp(false); // انتقال به فرم ورود
     } catch (err) {
-      console.error("Register error:", err.response?.data || err);
-      alert('خطا در ثبت‌نام. ممکن است ایمیل از قبل ثبت شده باشد یا اطلاعات ناقص باشد.');
+      console.error("Register error details:", err.response?.data);
+
+      // استخراج خطای دقیق از سمت جنگو برای نمایش به کاربر
+      const errorData = err.response?.data;
+      let errorMsg = 'خطا در ثبت‌نام.';
+
+      if (errorData) {
+        if (typeof errorData === 'string') {
+          errorMsg = errorData;
+        } else if (errorData.email) {
+          errorMsg = `ایمیل: ${errorData.email[0]}`;
+        } else if (errorData.password) {
+          errorMsg = `رمز عبور: ${errorData.password[0]}`;
+        } else if (errorData.non_field_errors) {
+          errorMsg = errorData.non_field_errors[0];
+        } else {
+          errorMsg = JSON.stringify(errorData);
+        }
+      }
+
+      alert(errorMsg);
     } finally {
       setLoading(false);
     }
